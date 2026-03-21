@@ -1,0 +1,3 @@
+#STUDY_PLANNER
+in this repo we are gonna do all our tech stuff and finally we are gonna develop an application
+here...
