@@ -1,0 +1,201 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  height: 100vh;
+  background:linear-gradient(rgba(93, 250, 2, 0.058)),url(login_backround.png) no-repeat center/cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items:center;
+
+}
+.logo-text {
+  text-align: center;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  display: none;
+}
+
+.logo-text h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 55px;
+}
+
+.logo-text h1 span {
+  color: #236201;
+}
+
+.logo-text p {
+  font-size: 16px;
+  line-height: 16px;
+  color: rgba(255, 255, 255, 0.8);
+}
+.logo{
+  height: 180px;
+  position: relative;
+}
+img{
+  width: 160px;
+  position: absolute;
+  left:-80px;
+  top: -15px;
+}
+.container {
+  height: 70%;
+  backdrop-filter: blur(1px);
+  background: rgba(0, 0, 0, 0.497);
+  padding: 20px 40px;
+  border-radius: 20px;
+  width: max(60%,350px);
+  color: white;
+  box-shadow: 0 0 10px rgba(245, 245, 28, 0.2);
+  border: solid 2px rgba(201, 204, 20, 0.733);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #ffffee;
+}
+
+.toggle {
+  display: flex;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #00000075;
+  border: 1px solid #4c4b4b;
+}
+
+.toggle button {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.toggle .active {
+  border-radius: 10px;
+  background: linear-gradient(160deg, #cdf80cf7 , #236201);
+  border: #51a507 solid 1px;
+  box-shadow: 0 0 10px #66b506a3;
+  transition:all 0.5s;
+}
+.toggle .active:hover{
+  background: linear-gradient(100deg, #cdf80cce , #297301);
+}
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: rgba(170, 194, 172, 0.349) solid 1.5px;
+  box-sizing: border-box;
+  outline: none;
+  background: rgba(0, 0, 0, 0.325);
+  color: white;
+}
+.input-group input::placeholder{
+  color: rgba(255, 255, 255, 0.932);
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 20px;
+  accent-color: rgb(221, 255, 0);
+}
+
+button.signin {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(180deg, #cdf80cce , #1f5402);
+  border: #3c7b04 solid 1px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+button.signin:hover{
+   box-shadow: 0 0 10px #a8f10ba3;
+}
+
+.social {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.social button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: rgba(11, 11, 11, 0.551);
+  color: white;
+}
+.signin-with-google{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  margin-top: 10px;
+}
+.signin-with-google div{
+  width: 30%;
+}
+.signin-with-google div hr{
+  border: rgba(187, 184, 184, 0.401) solid 1px;
+}
+.signin-with-google span{
+  padding: 0 10px;
+  font-size: 10px;
+}
+.footer {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
+}
+@media (min-width:1200px){
+  body{
+    background: linear-gradient(rgba(93, 250, 2, 0.058)),url(background1.jpeg) center no-repeat;
+  }
+  .logo-text{
+
+    display: block;
+  }
+  .logo{
+    height: 120px;
+  }
+  .logo img{
+    top: -42px;
+  }
+  .container{
+    padding: 0px 60px;
+    margin-top: 15px;
+  }
+  .container h1{
+    margin-top: 20px;
+  }
+}

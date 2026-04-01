@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FocusGrow Login</title>
+<link rel="stylesheet" href="login_page.css">
+</head>
+
+<body>
+<div class="logo"><img src="logo.png" alt="logo"></div>
+<div class="logo-text">
+  <h1>Focus<span>Grow</span></h1>
+  <p>Stay focused. Grow every day.</p>
+</div>
+<div class="container">
+  <h1>Welcome Back</h1>
+  <p class="subtitle">Sign in to continue your study journey</p>
+
+  <div class="toggle">
+    <button class="active" id="emailBtn">Email</button>
+    <button id="phoneBtn">Phone</button>
+  </div>
+
+  <div class="input-group">
+    <input type="text" id="email" placeholder="Enter your email">
+  </div>
+
+  <div class="input-group">
+    <input type="password" id="password" placeholder="Enter your password">
+  </div>
+
+  <div class="row">
+    <label><input type="checkbox"> Remember me</label>
+    <span>Forgot password?</span>
+  </div>
+
+  <button class="signin" id="signIn">Sign In</button>
+  <div class="signin-with-google"><div><hr></div>
+  <span>sign in with google</span>
+  <div><hr></div></div>
+  <div class="social">
+    <button>Google</button>
+    <button>Apple</button>
+  </div>
+  <div class="footer">
+    Don't have an account? <b>Create one</b>
+  </div>
+</div>
+<script src="login_page.js"></script>
+</body>
+</html>
