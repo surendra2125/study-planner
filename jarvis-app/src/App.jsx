@@ -1,43 +1,23 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import LandingPage from "./LandingPage";
 import SignUpPage from "./SignUpPage";
 import TutorialPage from "./TutorialPage";
-
+import QuestionPage from "./QuestionPage";
+import JarvisChat from "./JarvisChat";
 export default function App() {
-  // ✅ ALL STATES AT TOP
-  const [page, setPage] = useState("landing");
 
+  // ✅ PAGE STATE (FIXED)
+  const [page, setPage] = useState("landing");
+const [question, setQuestion] = useState("");
+const [webhookLink, setWebhookLink] = useState("");
+  // ✅ JARVIS STATES
   const [activeMode, setActiveMode] = useState(null);
   const [highlightViewer, setHighlightViewer] = useState(false);
   const [highlightChat, setHighlightChat] = useState(false);
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
-
-  // ✅ JARVIS FUNCTION
-  const callJarvis = (action, payload) => {
-    console.log("Jarvis:", action, payload);
-
-    if (action === "send_message") {
-      setMessages((prev) => [
-        ...prev,
-        { role: "user", text: payload },
-      ]);
-
-      setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          { role: "jarvis", text: "Analyzing your request..." },
-        ]);
-      }, 600);
-
-      setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          { role: "jarvis", text: "Proceeding with your input, Sir." },
-        ]);
-      }, 1400);
-    }
-  };
+  
+ const [username, setUsername] = useState("");
+  // ✅ DEBUG (optional)
+  console.log("Current Page:", page);
 
   // ✅ BUTTON HANDLERS
   const handlePhysicsClick = () => {
@@ -60,13 +40,35 @@ export default function App() {
     setTimeout(() => setHighlightChat(false), 1500);
   };
 
-  // ✅ PAGE ROUTING
+  // ✅ PAGE ROUTING (FIXED)
   if (page === "landing") {
     return <LandingPage setPage={setPage} />;
   }
+if (page === "question") {
+  return (
+   <QuestionPage
+  question={question}
+  webhookLink={webhookLink}
+  setPage={setPage}
+  setQuestion={setQuestion}
+  setWebhookLink={setWebhookLink}
+/>
+  );
+}
 
   if (page === "signup") {
-    return <SignUpPage setPage={setPage} />;
+    return (
+  <SignUpPage
+    setPage={setPage}
+    setQuestion={setQuestion}
+    setWebhookLink={setWebhookLink}
+     setUsernameGlobal={setUsername}  
+  />
+);
+  }
+
+  if (page === "login") {
+    return <SignUpPage setPage={setPage} />; // change later if you make LoginPage
   }
 
   if (page === "tutorial") {
@@ -76,113 +78,36 @@ export default function App() {
   // ✅ MAIN JARVIS UI
   if (page === "app") {
     return (
-      <div className="flex h-screen w-full flex-col bg-black text-white p-4">
+  <div className="h-screen overflow-hidden flex bg-black text-white">
 
-        {/* CONTROL BAR */}
-        <div className="flex gap-4 bg-black/40 backdrop-blur-md p-3 rounded-xl border border-gray-800">
-          <button
-            onClick={handlePhysicsClick}
-            className="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-400 hover:scale-105 transition transform shadow-lg shadow-blue-500/40"
-          >
-            Physics
-          </button>
+    {/* LEFT SIDE */}
+    <div className="w-2/3 h-full p-4">
+      
+      <div className="h-full border border-gray-700 rounded-2xl p-4">
+        
+        <h1 className="text-3xl mb-4">
+          3D Problem Viewer
+        </h1>
 
-          <button
-            onClick={handleMathClick}
-            className="px-4 py-2 bg-green-600 rounded-xl hover:bg-green-500 transition shadow-green-500/30 shadow-lg"
-          >
-            Math
-          </button>
+        <p className="text-gray-400 mb-4">
+          Mode: None selected
+        </p>
 
-          <button
-            onClick={handleStartProblem}
-            className="px-4 py-2 bg-purple-600 rounded-xl hover:bg-purple-500 transition shadow-purple-500/30 shadow-lg"
-          >
-            Start Problem
-          </button>
+        <div className="h-[85%] border border-gray-700 rounded-2xl flex items-center justify-center text-gray-500">
+          3D Simulation Space
         </div>
 
-        {/* MAIN */}
-        <div className="mt-4 flex flex-1 gap-4">
-
-          {/* VIEWER */}
-          <div
-            className={`w-2/3 rounded-2xl p-4 border bg-gradient-to-br from-gray-900 to-black ${
-              highlightViewer
-                ? "border-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.6)]"
-                : "border-gray-800"
-            }`}
-          >
-            <h2 className="text-xl mb-2">3D Problem Viewer</h2>
-            <p className="text-gray-400">
-              Mode: {activeMode || "None selected"}
-            </p>
-
-            <div className="mt-4 h-[80%] flex items-center justify-center border border-gray-700 rounded-xl text-gray-500">
-              3D Simulation Space
-            </div>
-          </div>
-
-          {/* CHAT */}
-          <div
-            className={`w-1/3 flex flex-col rounded-2xl p-4 border bg-black ${
-              highlightChat
-                ? "border-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.6)]"
-                : "border-gray-800"
-            }`}
-          >
-            <h2 className="text-lg mb-2">Jarvis</h2>
-
-            {/* MESSAGES */}
-            <div className="flex-1 overflow-y-auto space-y-2">
-              {messages.map((msg, i) => (
-                <div
-                  key={i}
-                  className={`flex ${
-                    msg.role === "user"
-                      ? "justify-end"
-                      : "justify-start"
-                  }`}
-                >
-                  <div
-                    className={`px-3 py-2 rounded-xl text-sm ${
-                      msg.role === "user"
-                        ? "bg-blue-600"
-                        : "bg-gray-800"
-                    }`}
-                  >
-                    {msg.text}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* INPUT */}
-            <div className="mt-2 flex gap-2">
-              <input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Talk to Jarvis..."
-                className="flex-1 p-2 rounded-xl bg-gray-900 border border-gray-700"
-              />
-
-              <button
-                onClick={() => {
-                  if (!input) return;
-                  callJarvis("send_message", input);
-                  setInput("");
-                }}
-                className="px-3 bg-blue-600 rounded-xl hover:bg-blue-500"
-              >
-                Send
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
-    );
-  }
 
-  // ✅ FALLBACK
+    </div>
+
+    {/* RIGHT SIDE CHAT */}
+    <div className="w-1/3 h-full border-l border-gray-800">
+      <JarvisChat username="jarvis" />
+    </div>
+
+  </div>
+);}
+
   return <div className="text-white">Loading...</div>;
 }
