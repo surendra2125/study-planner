@@ -1,5 +1,6 @@
 import { useState } from "react";
 import JarvisChat from "./JarvisChat";
+import { GoogleLogin } from "@react-oauth/google";
 console.log("Signup button clicked");
 export default function SignUpPage({ setPage, setQuestion, setWebhookLink, setUsernameGlobal }) {
   const [username, setUsername] = useState(""); // 👈 username = Id
@@ -14,7 +15,7 @@ export default function SignUpPage({ setPage, setQuestion, setWebhookLink, setUs
 
     try {
       console.log("Sending:", {
-        Id: username,
+        fullName: username,
         email,
         password,
       });
@@ -82,11 +83,29 @@ setPage("question");
 
       {/* Button */}
       <button
-        onClick={handleSignup}
-        className="px-6 py-2 bg-cyan-500 rounded hover:bg-cyan-400"
-      >
-        Sign Up
-      </button>
+  onClick={handleSignup}
+  className="px-6 py-2 bg-cyan-500 rounded hover:bg-cyan-400"
+>
+  Sign Up
+</button>
+
+<div className="mt-4">
+<GoogleLogin
+  onSuccess={(credentialResponse) => {
+    console.log("Google Login Success:", credentialResponse);
+
+    // Temporary test
+    alert("Google Login Successful!");
+
+    // Move user to next page
+    setPage("question");
+  }}
+  onError={() => {
+    console.log("Google Login Failed");
+    alert("Google Login Failed");
+  }}
+/>
+</div>
 
     </div>
   );

@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 
-export default function JarvisChat({ username }) {
+export default function JarvisChat({
+  username,
+  setQuestionData,
+  setModelUrl
+}){
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,7 +28,7 @@ export default function JarvisChat({ username }) {
 
     try {
       const res = await fetch(
-        "https://avvarusurendra.app.n8n.cloud/webhook/jarvis-chat",
+        "https://fridayjarvis.app.n8n.cloud/webhook/jarvis-chat",
         {
           method: "POST",
           headers: {
@@ -37,14 +41,42 @@ export default function JarvisChat({ username }) {
           }),
         }
       );
+const contentType = res.headers.get("content-type");
+console.log(
+  "CONTENT TYPE:",
+  res.headers.get("content-type")
+);
+if (
+  contentType?.includes("model/gltf-binary") ||
+  contentType?.includes("application/octet-stream")
+) {
+  const blob = await res.blob();
 
+  const modelUrl = URL.createObjectURL(blob);
+
+  setModelUrl(modelUrl);
+
+  setLoading(false);
+
+  return;
+}
       const data = await res.json();
+      console.log("WEBHOOK RESPONSE:", data);
+      if (data?.[0]) {
+  setQuestionData(data[0]);
+}
 
-      const reply =
-        data?.[0]?.output ||
-        data?.output ||
-        data?.message ||
-        "No response";
+      let reply = "No response";
+
+if (data?.[0]?.problem_title) {
+  reply = data[0].problem_title;
+} else {
+  reply =
+    data?.[0]?.output ||
+    data?.output ||
+    data?.message ||
+    "No response";
+}
 
       setMessages((prev) => [
         ...prev,

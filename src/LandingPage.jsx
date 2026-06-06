@@ -1,90 +1,114 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 
 export default function LandingPage({ setPage }) {
-  const [showSplash, setShowSplash] = useState(true)
-  const [fadeOut, setFadeOut] = useState(false)
+  const [showSplash, setShowSplash] = useState(true);
+  const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
     const fadeTimer = setTimeout(() => {
-      setFadeOut(true)
-    }, 5000)
+      setFadeOut(true);
+    }, 3500);
 
     const hideTimer = setTimeout(() => {
-      setShowSplash(false)
-    }, 5500)
+      setShowSplash(false);
+    }, 4200);
 
     return () => {
-      clearTimeout(fadeTimer)
-      clearTimeout(hideTimer)
-    }
-  }, [])
+      clearTimeout(fadeTimer);
+      clearTimeout(hideTimer);
+    };
+  }, []);
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
-      
-      {/* Splash Screen */}
+    <div className="min-h-screen bg-black overflow-hidden relative">
+
+      {/* Animated Background */}
+      <div className="absolute inset-0">
+        <div className="absolute w-[700px] h-[700px] bg-cyan-500/10 rounded-full blur-[150px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+
+        <div className="absolute w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[100px] left-1/4 top-1/3 animate-pulse" />
+
+        <div className="absolute w-[250px] h-[250px] bg-cyan-400/10 rounded-full blur-[90px] right-1/4 bottom-1/4 animate-pulse" />
+      </div>
+
+      {/* SPLASH SCREEN */}
       {showSplash && (
         <div
-          className={`absolute inset-0 z-50 bg-black flex items-center justify-center transition-opacity duration-500 ${
-            fadeOut ? 'opacity-0' : 'opacity-100'
+          className={`absolute inset-0 z-50 bg-black flex items-center justify-center transition-all duration-1000 ${
+            fadeOut ? "opacity-0 scale-125" : "opacity-100 scale-100"
           }`}
         >
-          <img
-            src="/logo.png"
-            alt="Study Planner Logo"
-            className="w-80 h-80 md:w-96 md:h-96 object-contain"
-          />
+          <div className="relative">
+
+            {/* Glow Ring 1 */}
+            <div className="absolute inset-0 rounded-full border border-cyan-400/30 scale-125 animate-spin" />
+
+            {/* Glow Ring 2 */}
+            <div
+              className="absolute inset-0 rounded-full border border-cyan-300/20 scale-150 animate-spin"
+              style={{
+                animationDirection: "reverse",
+                animationDuration: "8s",
+              }}
+            />
+
+            {/* Logo */}
+            <img
+              src="/logo.png"
+              alt="FRIDAY"
+              className="w-72 h-72 md:w-96 md:h-96 object-contain drop-shadow-[0_0_50px_rgba(34,211,238,0.8)]"
+            />
+          </div>
         </div>
       )}
 
-      {/* Main Landing Page */}
-      <div className="min-h-screen flex flex-col items-center justify-center px-4 relative">
+      {/* MAIN PAGE */}
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 relative z-10">
 
-        {/* Background */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[120px]" />
-          <div className="absolute top-1/3 left-1/3 w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[100px]" />
+        {/* Floating Logo */}
+        <div className="relative group">
+
+          <div className="absolute inset-0 bg-cyan-400/20 blur-3xl rounded-full" />
+
+          <img
+            src="/logo.png"
+            alt="FRIDAY"
+            className="w-44 h-44 md:w-56 md:h-56 object-contain animate-bounce"
+            style={{
+              animationDuration: "4s",
+            }}
+          />
         </div>
 
-        {/* Content */}
-        <div className="relative z-10 flex flex-col items-center gap-8">
+        {/* Title */}
+        <h1 className="mt-8 text-6xl md:text-7xl font-bold text-white tracking-wider">
+          FRIDAY
+        </h1>
 
-          {/* Logo */}
-          <div className="w-48 h-48 md:w-56 md:h-56">
-            <img
-              src="/logo.png"
-              alt="Study Planner Logo"
-              className="w-full h-full object-contain"
-            />
-          </div>
+        {/* Subtitle */}
+        <p className="mt-4 text-cyan-300 text-lg md:text-xl text-center max-w-2xl">
+          Your Intelligent Autonomous Learning Companion
+        </p>
 
-          {/* Title */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white text-center">
-            Start Your Journey
-          </h1>
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row gap-5 mt-10">
 
-          {/* Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 mt-4">
+          <button
+            onClick={() => setPage("signup")}
+            className="px-10 py-4 rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-semibold transition-all duration-300 hover:scale-105 shadow-[0_0_30px_rgba(34,211,238,0.5)]"
+          >
+            Get Started
+          </button>
 
-            {/* SIGN UP */}
-            <button
-              onClick={() => setPage("signup")}
-              className="px-8 py-3 rounded-full border-2 border-cyan-400 text-cyan-300 hover:text-white hover:border-cyan-300 transition"
-            >
-              Sign Up
-            </button>
+          <button
+            onClick={() => setPage("login")}
+            className="px-10 py-4 rounded-full border border-cyan-400 text-cyan-300 hover:text-white hover:border-cyan-300 transition-all duration-300 hover:scale-105"
+          >
+            Log In
+          </button>
 
-            {/* LOGIN */}
-            <button
-              onClick={() => setPage("login")}  // 👈 DIFFERENT PAGE
-              className="px-8 py-3 rounded-full border-2 border-cyan-400 text-cyan-300 hover:text-white hover:border-cyan-300 transition"
-            >
-              Log In
-            </button>
-
-          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
