@@ -1,4 +1,7 @@
-export default function CQProfile({ setPage }) {
+export default function CQProfile({
+  setPage,
+  tutorialActive
+}) {
   const progressData = [
     { month: "Jan", rating: 450 },
     { month: "Feb", rating: 620 },
@@ -6,18 +9,27 @@ export default function CQProfile({ setPage }) {
     { month: "Apr", rating: 1100 },
     { month: "May", rating: 1328 },
   ];
+ 
 
   return (
     <div className="min-h-screen bg-black text-white p-6">
 
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
-        <button
-          onClick={() => setPage("app")}
-          className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg"
-        >
-          ← Back
-        </button>
+       <button
+  onClick={() => {
+    if (!tutorialActive) {
+      setPage("app");
+    }
+  }}
+  className={`px-4 py-2 bg-gray-800 rounded-lg ${
+    tutorialActive
+      ? "opacity-50 cursor-not-allowed"
+      : ""
+  }`}
+>
+  ← Back
+</button>
 
         <h1 className="text-3xl font-bold text-cyan-400">
           CQ Profile
@@ -27,7 +39,9 @@ export default function CQProfile({ setPage }) {
       {/* Main Stats */}
       <div className="grid md:grid-cols-2 gap-6">
 
-        <div className="bg-gray-900 border border-cyan-500/20 rounded-2xl p-6">
+        <div
+         id="tutorial-cq"
+          className="bg-gray-900 border border-cyan-500/20 rounded-2xl p-6">
           <h2 className="text-cyan-400 text-xl mb-4">
             CQ Overview
           </h2>
@@ -45,7 +59,9 @@ export default function CQProfile({ setPage }) {
         </div>
 
         {/* Achievements */}
-        <div className="bg-gray-900 border border-cyan-500/20 rounded-2xl p-6">
+        <div 
+         id="tutorial-achievements"
+         className="bg-gray-900 border border-cyan-500/20 rounded-2xl p-6">
           <h2 className="text-cyan-400 text-xl mb-4">
             Achievements
           </h2>
@@ -71,7 +87,9 @@ export default function CQProfile({ setPage }) {
       </div>
 
       {/* Rating Progress */}
-      <div className="mt-8 bg-gray-900 border border-cyan-500/20 rounded-2xl p-6">
+      <div
+        id="tutorial-progress"
+         className="mt-8 bg-gray-900 border border-cyan-500/20 rounded-2xl p-6">
         <h2 className="text-cyan-400 text-xl mb-6">
           Rating Progress
         </h2>

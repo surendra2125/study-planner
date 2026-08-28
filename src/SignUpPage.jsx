@@ -1,9 +1,14 @@
 import { useState } from "react";
-import JarvisChat from "./JarvisChat";
 import { GoogleLogin } from "@react-oauth/google";
-console.log("Signup button clicked");
-export default function SignUpPage({ setPage, setQuestion, setWebhookLink, setUsernameGlobal }) {
-  const [username, setUsername] = useState(""); // 👈 username = Id
+
+export default function SignUpPage({
+  setPage,
+  setQuestion,
+  setWebhookLink,
+  setUsernameGlobal,
+  setUserId,
+}) {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,46 +20,60 @@ export default function SignUpPage({ setPage, setQuestion, setWebhookLink, setUs
 
     try {
       console.log("Sending:", {
+        action: "signup",
         fullName: username,
         email,
         password,
       });
 
       const res = await fetch(
-        "https://avvarusurendra.app.n8n.cloud/webhook/student-signin",
+        "https://fridayjarvis.app.n8n.cloud/webhook/v1/auth",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            Id: username, // ✅ IMPORTANT (capital I)
-            email: email,
-            password: password,
+            action: "signup",
+            fullName: username,
+            email,
+            password,
           }),
         }
       );
-setUsernameGlobal(username);   // 👈 SEND TO APP.jsx
-      const data = await res.json();   // 👈 IMPORTANT CHANGE
-console.log("Response:", data);
-setQuestion(data.question);      // store question
-setWebhookLink(data.webhookLink); // store link
-setPage("question");
-      // optional: check success
-     
 
+      const data = await res.json();
+
+      console.log("Response:", data);
+
+      if (data.status === "success" || data.success === true) {
+        localStorage.setItem("signupEmail", email);
+
+        localStorage.setItem(
+          "otpMessage",
+          data.message || "OTP sent successfully"
+        );
+
+        setUsernameGlobal(username);
+
+        setPage("otp");
+      } else {
+        alert(
+          data?.error?.message ||
+            data?.message ||
+            "Signup failed"
+        );
+      }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Signup Error:", error);
       alert("Server error");
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white gap-4">
-      
       <h1 className="text-3xl font-bold">Sign Up</h1>
 
-      {/* Username */}
       <input
         type="text"
         placeholder="Enter username"
@@ -63,7 +82,6 @@ setPage("question");
         className="px-4 py-2 rounded bg-gray-800 border border-gray-600"
       />
 
-      {/* Email */}
       <input
         type="email"
         placeholder="Enter email"
@@ -72,7 +90,6 @@ setPage("question");
         className="px-4 py-2 rounded bg-gray-800 border border-gray-600"
       />
 
-      {/* Password */}
       <input
         type="password"
         placeholder="Enter password"
@@ -81,32 +98,67 @@ setPage("question");
         className="px-4 py-2 rounded bg-gray-800 border border-gray-600"
       />
 
-      {/* Button */}
       <button
-  onClick={handleSignup}
-  className="px-6 py-2 bg-cyan-500 rounded hover:bg-cyan-400"
->
-  Sign Up
-</button>
+        onClick={handleSignup}
+        className="px-6 py-2 bg-cyan-500 rounded hover:bg-cyan-400"
+      >
+        Sign Up
+      </button>
 
-<div className="mt-4">
-<GoogleLogin
-  onSuccess={(credentialResponse) => {
-    console.log("Google Login Success:", credentialResponse);
+      <div className="mt-4">
+       <GoogleLogin
+  onSuccess={async (credentialResponse) => {
+    const token = credentialResponse?.credential;
 
-    // Temporary test
-    alert("Google Login Successful!");
+    if (!token) {
+      alert("Google did not return a credential");
+      return;
+    }
 
-    // Move user to next page
-    setPage("question");
+    try {
+      const res = await fetch(
+        "https://fridayjarvis.app.n8n.cloud/webhook/v1/auth",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            action: "google signup",
+            credentials: token,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      console.log("Google Response:", data);
+
+      if (data.status === "success" || data.success === true) {
+        setUserId(data.data);
+
+        if (data.fullName) {
+          setUsernameGlobal(data.fullName);
+        }
+
+        setPage("tutorial");
+      } else {
+        alert(
+          data?.error?.message ||
+          data?.message ||
+          "Google signup failed"
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Google signup failed");
+    }
   }}
   onError={() => {
-    console.log("Google Login Failed");
     alert("Google Login Failed");
   }}
 />
-</div>
-
+      </div>
     </div>
   );
 }

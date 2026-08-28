@@ -1,114 +1,154 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function LandingPage({ setPage }) {
-  const [showSplash, setShowSplash] = useState(true);
-  const [fadeOut, setFadeOut] = useState(false);
-
-  useEffect(() => {
-    const fadeTimer = setTimeout(() => {
-      setFadeOut(true);
-    }, 3500);
-
-    const hideTimer = setTimeout(() => {
-      setShowSplash(false);
-    }, 4200);
-
-    return () => {
-      clearTimeout(fadeTimer);
-      clearTimeout(hideTimer);
-    };
-  }, []);
+  const [showIntro, setShowIntro] = useState(true);
 
   return (
     <div className="min-h-screen bg-black overflow-hidden relative">
 
-      {/* Animated Background */}
-      <div className="absolute inset-0">
-        <div className="absolute w-[700px] h-[700px] bg-cyan-500/10 rounded-full blur-[150px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
-
-        <div className="absolute w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[100px] left-1/4 top-1/3 animate-pulse" />
-
-        <div className="absolute w-[250px] h-[250px] bg-cyan-400/10 rounded-full blur-[90px] right-1/4 bottom-1/4 animate-pulse" />
-      </div>
-
-      {/* SPLASH SCREEN */}
-      {showSplash && (
-        <div
-          className={`absolute inset-0 z-50 bg-black flex items-center justify-center transition-all duration-1000 ${
-            fadeOut ? "opacity-0 scale-125" : "opacity-100 scale-100"
-          }`}
+      {/* INTRO VIDEO */}
+      {showIntro && (
+        <video
+          autoPlay
+           muted
+          playsInline
+          onEnded={() => setShowIntro(false)}
+          className="fixed inset-0 w-full h-full object-cover z-50"
         >
-          <div className="relative">
+          <source src="/intro.mp4" type="video/mp4" />
+        </video>
+      )}
 
-            {/* Glow Ring 1 */}
-            <div className="absolute inset-0 rounded-full border border-cyan-400/30 scale-125 animate-spin" />
+      {/* LANDING PAGE */}
+      {!showIntro && (
+        <div className="min-h-screen flex flex-col items-center justify-center relative">
 
-            {/* Glow Ring 2 */}
-            <div
-              className="absolute inset-0 rounded-full border border-cyan-300/20 scale-150 animate-spin"
-              style={{
-                animationDirection: "reverse",
-                animationDuration: "8s",
-              }}
-            />
+          {/* Background Glow */}
+          <div className="absolute inset-0">
 
-            {/* Logo */}
-            <img
-              src="/logo.png"
-              alt="FRIDAY"
-              className="w-72 h-72 md:w-96 md:h-96 object-contain drop-shadow-[0_0_50px_rgba(34,211,238,0.8)]"
-            />
+            <div className="absolute w-[700px] h-[700px]
+            bg-cyan-500/10
+            rounded-full
+            blur-[150px]
+            left-1/2
+            top-1/2
+            -translate-x-1/2
+            -translate-y-1/2" />
+
+            <div className="absolute w-[300px] h-[300px]
+            bg-cyan-400/10
+            rounded-full
+            blur-[100px]
+            left-1/4
+            top-1/3" />
+
           </div>
+
+          {/* Logo */}
+          <div className="relative z-10">
+
+            {/* Glow */}
+            <div
+              className="
+              absolute
+              inset-0
+              bg-cyan-400/20
+              blur-[100px]
+              rounded-full
+              scale-125
+            "
+            />
+
+            <img
+              src="/jarvis-logo.png"
+              alt="FRIDAY"
+              className="
+              w-[220px]
+              md:w-[300px]
+              object-contain
+              relative
+              z-10
+              "
+            />
+
+          </div>
+
+          {/* Title */}
+          <h1
+            className="
+            z-10
+            mt-8
+            text-6xl
+            md:text-7xl
+            font-bold
+            text-white
+            tracking-[0.3em]
+            "
+          >
+            FRIDAY
+          </h1>
+
+          {/* Subtitle */}
+          <p
+            className="
+            z-10
+            mt-4
+            text-cyan-300
+            text-lg
+            md:text-xl
+            text-center
+            max-w-2xl
+            "
+          >
+            Your Intelligent Autonomous Learning Companion
+          </p>
+
+          {/* Buttons */}
+          <div className="z-10 flex gap-5 mt-10">
+
+            <button
+              onClick={() => setPage("signup")}
+              className="
+              px-10
+              py-4
+              rounded-full
+              bg-cyan-500
+              hover:bg-cyan-400
+              text-black
+              font-semibold
+              transition-all
+              duration-300
+              hover:scale-105
+              shadow-[0_0_30px_rgba(34,211,238,0.5)]
+              "
+            >
+              Get Started
+            </button>
+
+            <button
+              onClick={() => setPage("login")}
+              className="
+              px-10
+              py-4
+              rounded-full
+              border
+              border-cyan-400
+              text-cyan-300
+              hover:text-white
+              hover:border-cyan-300
+              transition-all
+              duration-300
+              hover:scale-105
+              "
+            >
+              Log In
+            </button>
+
+          </div>
+
         </div>
       )}
 
-      {/* MAIN PAGE */}
-      <div className="min-h-screen flex flex-col items-center justify-center px-4 relative z-10">
-
-        {/* Floating Logo */}
-        <div className="relative group">
-
-          <div className="absolute inset-0 bg-cyan-400/20 blur-3xl rounded-full" />
-
-          <img
-            src="/logo.png"
-            alt="FRIDAY"
-            className="w-44 h-44 md:w-56 md:h-56 object-contain animate-bounce"
-            style={{
-              animationDuration: "4s",
-            }}
-          />
-        </div>
-
-        {/* Title */}
-        <h1 className="mt-8 text-6xl md:text-7xl font-bold text-white tracking-wider">
-          FRIDAY
-        </h1>
-
-        {/* Subtitle */}
-        <p className="mt-4 text-cyan-300 text-lg md:text-xl text-center max-w-2xl">
-          Your Intelligent Autonomous Learning Companion
-        </p>
-
-        {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-5 mt-10">
-
-          <button
-            onClick={() => setPage("signup")}
-            className="px-10 py-4 rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-semibold transition-all duration-300 hover:scale-105 shadow-[0_0_30px_rgba(34,211,238,0.5)]"
-          >
-            Get Started
-          </button>
-
-          <button
-            onClick={() => setPage("login")}
-            className="px-10 py-4 rounded-full border border-cyan-400 text-cyan-300 hover:text-white hover:border-cyan-300 transition-all duration-300 hover:scale-105"
-          >
-            Log In
-          </button>
-
-        </div>
-      </div>
     </div>
   );
 }
