@@ -1,0 +1,1480 @@
+{
+  "name": "library engine",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "engineering_model_library_creator",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -5872,
+        80
+      ],
+      "id": "53cf03b9-a77f-4fa9-b360-42e052ffc1dd",
+      "name": "library creator",
+      "webhookId": "84cf86cb-b88a-4794-827d-e74b6eff4211"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0016dcba-4fa6-4555-a9ed-d56182fc6f82",
+              "leftValue": "={{ $json.missing_components.length + $json.missing_assemblies.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -4208,
+        80
+      ],
+      "id": "ef69757f-d142-4209-b996-192f833be720",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2ea99a02-ee06-4585-9c8b-b9ff23a106c3",
+              "leftValue": "={{ $json.correct_link }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -576,
+        -224
+      ],
+      "id": "f2def728-6549-4029-8720-655436414c0c",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to update the details of articraft along with the timeline and to update the component details\nINSERT INTO assembly_library (\n    assembly_name,\n    purpose,\n    strengths,\n    weaknesses,\n    why_not_satisfy\n)\nSELECT\n    x->>'system_name',\n    x->>'purpose',\n    x->>'strengths',\n    x->>'weaknesses',\n    x->>'why_not_satisfy'\nFROM jsonb_array_elements(\n    '{{ JSON.stringify($('create a structed knowledge pack').item.json.related_systems) }}'::jsonb\n) x\nWHERE x->>'system_name' IN (\n    SELECT jsonb_array_elements_text(\n        '{{ JSON.stringify($json.missing_assemblies) }}'::jsonb\n    )\n);\nINSERT INTO component_library (\n    component_name,\n    typical_use,\n    benefits,\n    limitations,\n    size_considerations,\n    weight_considerations\n)\nSELECT\n    x->>'component_name',\n    x->>'typical_use',\n    x->>'benefits',\n    x->>'limitations',\n    x->>'size_considerations',\n    x->>'weight_considerations'\nFROM jsonb_array_elements(\n    '{{ JSON.stringify($('create a structed knowledge pack').item.json.available_components) }}'::jsonb\n) x\nWHERE x->>'component_name' IN (\n    SELECT jsonb_array_elements_text(\n        '{{ JSON.stringify($json.missing_components) }}'::jsonb\n    )\n);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3856,
+        -208
+      ],
+      "id": "b1221cd3-369b-4872-98d4-7d5d50e31d9f",
+      "name": "update artifact and component details",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=scinece field : {{ $json.body['science field'] }}, mission year : {{ $json.body['mission year'] }}, mission : {{ $json.body.mission }}, constraints : {{ $json.body.constraints }} and requirements : {{ $json.body.requirements }}"
+            },
+            {
+              "role": "system",
+              "content": "ROLE\n\nYou are the Mission Knowledge Pack Generator.\n\nYour responsibility is to create a comprehensive engineering knowledge pack that represents everything realistically available to an engineer BEFORE the mission year.\n\nThe knowledge pack will be used by Jarvis during future engineering conversations with a student.\n\nThe goal is NOT to solve the mission.\n\nThe goal is to provide engineering context, available technologies, available components, historical designs, manufacturing capabilities, materials, limitations, and known engineering knowledge that existed before the mission year.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nINPUT\n\nYou will receive:\n\n{\n\"science_field\": \"{{science_field}}\",\n\"mission_year\": \"{{mission_year}}\",\n\"mission\": \"{{mission}}\",\n\"constraints\": {{constraints}},\n\"requirements\": {{requirements}}\n}\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nPRIMARY OBJECTIVE\n\nGenerate a detailed engineering knowledge pack that describes:\n\n1. Existing technologies available before the mission year.\n2. Existing products and prototypes related to the mission.\n3. Existing components that could realistically be used.\n4. Existing materials available.\n5. Existing manufacturing methods available.\n6. Existing scientific knowledge available.\n7. Existing engineering limitations.\n8. Existing alternatives and competing approaches.\n9. Existing subsystems and supporting technologies.\n10. Existing small components and hardware that may influence design decisions.\n\nThe knowledge pack must contain enough detail that Jarvis can later help students reason about engineering tradeoffs without requiring additional historical research.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nRESEARCH TIME RULE\n\nTreat the mission year as the present year.\n\nDo NOT use technologies, components, materials, manufacturing processes, discoveries, products, or engineering techniques that became available after the mission year.\n\nEverything included must have existed before or during the mission year.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nKNOWLEDGE PACK SECTIONS\n\nGenerate the following sections.\n\nSECTION 1 — MISSION CONTEXT\n\nBriefly explain:\n\n* What engineering problem exists.\n* Why it is difficult.\n* What constraints make it challenging.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSECTION 2 — EXISTING RELATED SYSTEMS\n\nIdentify:\n\n* Existing machines.\n* Existing devices.\n* Existing prototypes.\n* Existing commercial products.\n* Existing industrial systems.\n\nFor each include:\n\n* Name\n* Purpose\n* Strengths\n* Weaknesses\n* Why it does not fully satisfy the mission\n\nInclude as many relevant examples as possible.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSECTION 3 — AVAILABLE COMPONENTS\n\nList all realistically available components relevant to the mission.\n\nExamples:\n\n* Motors\n* Actuators\n* Gears\n* Bearings\n* Shafts\n* Springs\n* Fasteners\n* Hinges\n* Wheels\n* Sensors\n* Switches\n* Relays\n* Circuit boards\n* PCBs\n* Controllers\n* Batteries\n* Power supplies\n* Wiring\n* Structural members\n\nFor each component include:\n\n* Component name\n* Typical use\n* Benefits\n* Limitations\n* Size considerations\n* Weight considerations\n\nBe exhaustive.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSECTION 4 — AVAILABLE MATERIALS\n\nList all materials available before the mission year.\n\nInclude:\n\n* Metals\n* Alloys\n* Plastics\n* Composites\n* Ceramics\n* Woods\n* Fabrics\n* Elastomers\n\nFor each include:\n\n* Material name\n* Properties\n* Weight characteristics\n* Strength characteristics\n* Manufacturing suitability\n* Common engineering uses\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSECTION 5 — AVAILABLE MANUFACTURING METHODS\n\nDescribe available manufacturing capabilities.\n\nExamples:\n\n* Casting\n* Forging\n* Machining\n* Turning\n* Milling\n* Welding\n* Riveting\n* Injection molding\n* Sheet metal forming\n* Hand assembly\n\nFor each include:\n\n* Capability\n* Precision level\n* Cost level\n* Typical applications\n* Major limitations\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSECTION 6 — AVAILABLE SCIENTIFIC KNOWLEDGE\n\nSummarize scientific principles already known before the mission year that are relevant to the mission.\n\nInclude:\n\n* Physical principles\n* Mathematical principles\n* Engineering theories\n* Design rules\n* Safety considerations\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSECTION 7 — DESIGN BOTTLENECKS\n\nIdentify the major engineering challenges engineers of the era would face.\n\nExplain:\n\n* What prevents easy success.\n* Which constraints are most difficult.\n* Which resources are scarce.\n* Which technologies are immature.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSECTION 8 — MICRO-COMPONENT OPPORTUNITIES\n\nIdentify small engineering improvements that could matter.\n\nExamples:\n\n* Lighter fasteners\n* Better bearings\n* Improved gearing\n* Reduced friction interfaces\n* Smaller motors\n* Improved mounting methods\n* Improved wiring layouts\n* Improved structural supports\n* Weight reductions\n* Assembly simplifications\n\nFor each explain:\n\n* Potential benefit\n* Why it matters\n* Possible tradeoffs\n\nThis section should contain many examples.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSECTION 9 — ENGINEERING INVENTORY\n\nCreate a comprehensive inventory of all potentially useful technologies, components, materials, and subsystems available before the mission year.\n\nThink broadly.\n\nInclude anything that might help an engineer working on the mission.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nCRITICAL RESTRICTIONS\n\nDO NOT:\n\n* Solve the mission.\n* Recommend a final design.\n* Reveal future inventions.\n* Reveal technologies from after the mission year.\n* Optimize a solution.\n* Choose the best approach.\n\nProvide only historical engineering knowledge and available resources.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nOUTPUT FORMAT\n\nReturn a structured JSON object:\n\n{\n  \"mission_context\": {\n    \"engineering_problem\": \"\",\n    \"difficulty\": \"\",\n    \"constraints\": \"\"\n  },\n\n  \"related_systems\": [\n    {\n      \"system_name\": \"\",\n      \"purpose\": \"\",\n      \"strengths\": \"\",\n      \"weaknesses\": \"\",\n      \"why_not_satisfy\": \"\"\n    }\n  ],\n\n  \"available_components\": [\n    {\n      \"component_name\": \"\",\n      \"typical_use\": \"\",\n      \"benefits\": \"\",\n      \"limitations\": \"\",\n      \"size_considerations\": \"\",\n      \"weight_considerations\": \"\"\n    }\n  ],\n\n  \"available_materials\": [\n    {\n      \"material_name\": \"\",\n      \"properties\": \"\",\n      \"weight_characteristics\": \"\",\n      \"strength_characteristics\": \"\",\n      \"manufacturing_suitability\": \"\",\n      \"common_engineering_uses\": \"\"\n    }\n  ],\n\n  \"manufacturing_methods\": [\n    {\n      \"method_name\": \"\",\n      \"precision_level\": \"\",\n      \"cost_level\": \"\",\n      \"typical_applications\": \"\",\n      \"major_limitations\": \"\"\n    }\n  ],\n\n  \"scientific_knowledge\": [\n    {\n      \"knowledge_name\": \"\",\n      \"description\": \"\",\n      \"relevance\": \"\"\n    }\n  ],\n\n  \"design_bottlenecks\": [\n    {\n      \"bottleneck_name\": \"\",\n      \"description\": \"\",\n      \"impact\": \"\"\n    }\n  ],\n\n  \"micro_component_opportunities\": [\n    {\n      \"opportunity_name\": \"\",\n      \"potential_benefit\": \"\",\n      \"why_it_matters\": \"\",\n      \"possible_tradeoffs\": \"\"\n    }\n  ],\n\n  \"engineering_inventory\": [\n    {\n      \"asset_name\": \"\",\n      \"asset_type\": \"\",\n      \"description\": \"\",\n      \"primary_function\": \"\",\n      \"source_category\": \"\"\n    }\n  ]\n}\n\nThe knowledge pack should be extremely detailed and comprehensive.\n\n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        -5664,
+        80
+      ],
+      "id": "cc6eefb6-317b-4193-9122-a33dab574ac9",
+      "name": "mission knowledge pack generator",
+      "credentials": {
+        "openAiApi": {
+          "id": "SuFvr8S7usZKS2Qj",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to update the confirmed link",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -272,
+        -112
+      ],
+      "id": "bbfff45c-fefe-460d-8bd9-52efaae398c9",
+      "name": "update confirmed link",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to update the confirmation of the link",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -272,
+        -352
+      ],
+      "id": "36cc4d96-dd0a-42ab-916e-36362c01e2c5",
+      "name": "link confirmation",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to update the artcraft details into student mission articrafts database\n-- A query to update the useful components from global library to mission library",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        176,
+        96
+      ],
+      "id": "1faf1a65-3c56-4d32-8b33-2c9b7d9f9cb6",
+      "name": "update mission library",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const available_components = $('create a structed knowledge pack').first().json.available_components;\n\nconst related_systems =$('create a structed knowledge pack').first().json.related_systems;\n\nconst components = [\n  ...new Set(\n    (available_components || [])\n      .map(c => c.component_name)\n      .filter(Boolean)\n  )\n];\n\nconst assemblies = [\n  ...new Set(\n    (related_systems || [])\n      .map(s => s.system_name)\n      .filter(Boolean)\n  )\n];\n\nreturn [{\n  json: {\n    components,\n    assemblies\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4912,
+        80
+      ],
+      "id": "861c7a71-bf5e-47a8-8e30-79ce535ef17d",
+      "name": "list of assesmblies and components"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get raw AI output\nlet response = $input.first().json.output[0].content[0].text;\n\n// Remove markdown wrappers if AI returns ```json\nresponse = response\n  .replace(/^```json\\s*/i, '')\n  .replace(/^```\\s*/i, '')\n  .replace(/\\s*```$/i, '')\n  .trim();\n\nconst pack = JSON.parse(response);\n\n// Get mission_id from Create Mission node\nconst missionId = $('library creator').first().json.body[\"id\"];\n\n// Structure everything for DB insertion\nconst structured = {\n  \n  related_systems: (pack.related_systems || []).map(item => ({\n    mission_id: missionId,\n    ...item\n  })),\n\n  available_components: (pack.available_components || []).map(item => ({\n    mission_id: missionId,\n    ...item\n  })),\n\n  available_materials: (pack.available_materials || []).map(item => ({\n    mission_id: missionId,\n    ...item\n  })),\n\n  manufacturing_methods: (pack.manufacturing_methods || []).map(item => ({\n    mission_id: missionId,\n    ...item\n  })),\n\n  scientific_knowledge: (pack.scientific_knowledge || []).map(item => ({\n    mission_id: missionId,\n    ...item\n  })),\n\n  design_bottlenecks: (pack.design_bottlenecks || []).map(item => ({\n    mission_id: missionId,\n    ...item\n  })),\n\n  micro_component_opportunities:\n    (pack.micro_component_opportunities || []).map(item => ({\n      mission_id: missionId,\n      ...item\n    })),\n\n  engineering_inventory:\n    (pack.engineering_inventory || []).map(item => ({\n      mission_id: missionId,\n      ...(typeof item === 'string'\n        ? { asset_name: item }\n        : item)\n    }))\n};\n\nreturn [{ json: structured }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5312,
+        80
+      ],
+      "id": "9b6d46e6-96f9-4048-a3e7-aab1dba7cb4a",
+      "name": "create a structed knowledge pack"
+    },
+    {
+      "parameters": {
+        "jsCode": "const present_components = [];\nconst missing_components = [];\n\nconst present_assemblies = [];\nconst missing_assemblies = [];\n\nfor (const item of $input.all()) {\n  const row = item.json;\n\n    // Assemblies\n  if (row.assembly_name) {\n    if (row.status === \"present\") {\n      present_assemblies.push({\n        assembly_id: row.assembly_id,\n        assembly_name: row.assembly_name\n      });\n    } else {\n      missing_assemblies.push(row.assembly_name);\n    }\n  }\n\n  // Components\n  if (row.component_name) {\n    if (row.status === \"present\") {\n      present_components.push({\n        component_id: row.component_id,\n        component_name: row.component_name\n      });\n    } else {\n      missing_components.push(row.component_name);\n    }\n  }\n}\n\nreturn [{\n  json: {\n    present_assemblies,\n    missing_assemblies,\n    present_components,\n    missing_components\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4496,
+        80
+      ],
+      "id": "1627d22a-c8d9-4aa2-a4bd-530a613dd5a8",
+      "name": "separate present and mission items"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH mission_assets AS (\n\n    SELECT\n        '{{ $('library creator').item.json.body.id }}'::uuid AS mission_id,\n        unnest(\n            ARRAY[\n                {{ $('separate present and mission items').item.json.missing_assemblies.map(a => `'${a.replace(/'/g,\"''\")}'`).join(',') }}\n            ]\n        ) AS asset_name,\n        'assembly' AS asset_type\n\n    UNION ALL\n\n    SELECT\n        '{{ $('library creator').item.json.body.id }}'::uuid,\n        unnest(\n            ARRAY[\n                {{ $('separate present and mission items').item.json.missing_components.map(c => `'${c.replace(/'/g,\"''\")}'`).join(',') }}\n            ]\n        ) AS asset_name,\n        'component' AS asset_type\n\n)\n\nINSERT INTO asset_source_matches (\n    mission_id,\n    asset_name,\n    asset_type,\n    source_id,\n    source_name,\n    search_url\n)\n\nSELECT\n    ma.mission_id,\n    ma.asset_name,\n    ma.asset_type,\n    es.source_id,\n    es.source_name,\n\n    REPLACE(\n        es.search_url_pattern,\n        '{search_term}',\n        REPLACE(ma.asset_name,' ','+')\n    ) AS search_url\n\nFROM mission_assets ma\nCROSS JOIN engineering_sources es\n\nON CONFLICT (\n    mission_id,\n    asset_name,\n    asset_type,\n    source_name\n)\nDO NOTHING;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -960,
+        -224
+      ],
+      "id": "25c20c3b-7eb1-443a-a79b-889a255524bf",
+      "name": "create search queries",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT *\nFROM asset_source_matches\nWHERE status = 'PENDING'\nLIMIT 100;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -832,
+        -224
+      ],
+      "id": "84418e68-6c06-4de4-83c4-2ae2c55937a0",
+      "name": "searcg for pending assets_source_matches",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input;\nreturn items.map(item => {\n  return {\n    json: {\n      asset: item.json.asset_name,\n      length: item.json.body.length,\n      first500: item.json.body.substring(0, 500)\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -704,
+        -224
+      ],
+      "id": "3cf6b6eb-36d1-404d-99e1-9cfe9f95f090",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -3184,
+        -208
+      ],
+      "id": "522e3a7d-0fe1-4207-9de8-ccfe9f6afa47",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "const missing_assemblies = $('If').first().json.missing_assemblies;\nconst missing_components = $('If').first().json.missing_components;\n\nconst assets = [\n  ...missing_assemblies.map(name => ({\n    asset_type: \"assembly\",\n    asset_name: name\n  })),\n  ...missing_components.map(name => ({\n    asset_type: \"component\",\n    asset_name: name\n  }))\n];\n\nreturn assets;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3632,
+        -208
+      ],
+      "id": "4380b339-0628-4d53-a82a-23dd00d7593d",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "resource": "googleSearchAPI",
+        "search": "=(site:://grabcad.com OR site:://github.com* OR site:mcmaster.com OR site:3dfindit.com) \"{{ $json.asset_name }}\" -inurl:issues -inurl:discussions\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-scrapingbee.ScrapingBee",
+      "typeVersion": 1,
+      "position": [
+        -2928,
+        -192
+      ],
+      "id": "29b29ec7-7daf-4a25-a392-cbd0a1c9278d",
+      "name": "Get SERP data using GOOGLE SEARCH API"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5327e257-0056-4118-bc2b-f390a74bd904",
+              "leftValue": "={{ $json.organic_results[0].url }}",
+              "rightValue": "?query=",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "81ae9d1e-2b2f-45c4-b3da-2d4ca07d7e0d",
+              "leftValue": "={{ $json.organic_results[0].url }}",
+              "rightValue": "/search",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "7f8383a0-bedb-4513-8e0c-dc6eacc9eed3",
+              "leftValue": "={{ $json.organic_results[0].url }}",
+              "rightValue": "/tag/",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "84cdc684-d7dd-443e-af85-3b75d81681a2",
+              "leftValue": "={{ $json.organic_results[0].url }}",
+              "rightValue": "/software/",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2624,
+        -192
+      ],
+      "id": "5be6d0f3-f2e6-4d05-9927-8989f11f0778",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.organic_results[0].url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1408,
+        16
+      ],
+      "id": "ce592664-a0f6-4726-a21c-ab7bc4c4d90b",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const assetName = $('Loop Over Items').first().json.asset_name;\n\nconst normalize = (str) => {\n  return str.toLowerCase().replace(/[^a-z0-9\\s]/g, ' ').replace(/\\s+/g, ' ').trim();\n};\n\nconst assetTokens = [...new Set(normalize(assetName).split(' '))];\n\nconst scoredModels = $input.first().json.body.models\n\n  // Remove invalid entries first\n  .filter(m => m.title && m.url && m.url !== \"#\")\n\n  // Then score the remaining models\n  .map(model => {\n    const titleTokens = [...new Set(normalize(model.title).split(' '))];\n\n    const matches = assetTokens.filter(token =>\n      titleTokens.includes(token)\n    ).length;\n\n    const score = matches / assetTokens.length;\n\n    return {\n      ...model,\n      score\n    };\n  });\n\nscoredModels.sort((a, b) => b.score - a.score);\n\nreturn scoredModels.map(model => ({ json: model }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1952,
+        -208
+      ],
+      "id": "764310eb-69c7-4016-bdf2-77f09fe5ecad",
+      "name": "Code in JavaScript2",
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "function getSlug(pageUrl) {\n    return pageUrl.split('/').pop();\n}\n\nconst slug = getSlug(\n    $input.first().json.url\n);\n\nconst apiUrl =\n    `https://grabcad.com/community/api/v1/models/${slug}?extended=true`;\n// irobot-roomba-8xx-series-handle-1\nreturn {\n  api : apiUrl\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1680,
+        -224
+      ],
+      "id": "79a69b95-74f4-4aaf-b480-9688e65111b6",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to check whether the given articrafts and components present in the global library\nWITH input_assemblies AS (\n    SELECT jsonb_array_elements_text(\n        '{{ JSON.stringify($json.assemblies) }}'::jsonb\n    ) AS assembly_name\n)\nSELECT\n    ia.assembly_name,\n    al.assembly_id,\n    CASE\n        WHEN al.assembly_id IS NOT NULL THEN 'present'\n        ELSE 'missing'\n    END AS status\nFROM input_assemblies ia\nLEFT JOIN assembly_library al\n    ON LOWER(al.assembly_name) = LOWER(ia.assembly_name);\nWITH input_components AS (\n    SELECT jsonb_array_elements_text(\n        '{{ JSON.stringify($json.components) }}'::jsonb\n    ) AS component_name\n)\nSELECT\n    ic.component_name,\n    cl.component_id,\n    CASE\n        WHEN cl.component_id IS NOT NULL THEN 'present'\n        ELSE 'missing'\n    END AS status\nFROM input_components ic\nLEFT JOIN component_library cl\n    ON LOWER(cl.component_name) = LOWER(ic.component_name);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -4704,
+        80
+      ],
+      "id": "a3955d5a-7c89-47ad-8dd3-1652f79d5c7b",
+      "name": "check global library",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO related_systems (\n    mission_id,\n    assembly_name,\n    purpose,\n    strengths,\n    weaknesses,\n    why_not_satisfy\n)\nSELECT\n    (x->>'mission_id')::uuid,\n    x->>'system_name',\n    x->>'purpose',\n    x->>'strengths',\n    x->>'weaknesses',\n    x->>'why_not_satisfy'\nFROM jsonb_array_elements(\n    '{{ JSON.stringify($json.related_systems).replace(/'/g, \"''\") }}'::jsonb\n) x;\nINSERT INTO available_components (\n    mission_id,\n    component_name,\n    typical_use,\n    benefits,\n    limitations,\n    size_considerations,\n    weight_considerations\n)\nSELECT\n    (x->>'mission_id')::uuid,\n    x->>'component_name',\n    x->>'typical_use',\n    x->>'benefits',\n    x->>'limitations',\n    x->>'size_considerations',\n    x->>'weight_considerations'\nFROM jsonb_array_elements(\n    '{{ JSON.stringify($json.available_components).replace(/'/g, \"''\") }}'::jsonb\n) x;\nINSERT INTO available_materials (\n    mission_id,\n    material_name,\n    properties,\n    weight_characteristics,\n    strength_characteristics,\n    manufacturing_suitability,\n    common_engineering_uses\n)\nSELECT\n    (x->>'mission_id')::uuid,\n    x->>'material_name',\n    x->>'properties',\n    x->>'weight_characteristics',\n    x->>'strength_characteristics',\n    x->>'manufacturing_suitability',\n    x->>'common_engineering_uses'\nFROM jsonb_array_elements(\n    '{{ JSON.stringify($json.available_materials).replace(/'/g, \"''\") }}'::jsonb\n) x;\nINSERT INTO manufacturing_methods (\n    mission_id,\n    capability,\n    precision_level,\n    cost_level,\n    typical_applications,\n    major_limitations\n)\nSELECT\n    (x->>'mission_id')::uuid,\n    x->>'method_name',\n    x->>'precision_level',\n    x->>'cost_level',\n    x->>'typical_applications',\n    x->>'major_limitations'\nFROM jsonb_array_elements(\n    '{{ JSON.stringify($json.manufacturing_methods).replace(/'/g, \"''\") }}'::jsonb\n) x;\nINSERT INTO scientific_knowledge (\n    mission_id,\n    knowledge_name,\n    description,\n    relevance\n)\nSELECT\n    (x->>'mission_id')::uuid,\n    x->>'knowledge_name',\n    x->>'description',\n    x->>'relevance'\nFROM jsonb_array_elements(\n    '{{ JSON.stringify($json.scientific_knowledge).replace(/'/g, \"''\") }}'::jsonb\n) x;\nINSERT INTO design_bottlenecks (\n    mission_id,\n    bottleneck_name,\n    description,\n    impact\n)\nSELECT\n    (x->>'mission_id')::uuid,\n    x->>'bottleneck_name',\n    x->>'description',\n    x->>'impact'\nFROM jsonb_array_elements(\n    '{{ JSON.stringify($json.design_bottlenecks).replace(/'/g, \"''\") }}'::jsonb\n) x;\nINSERT INTO micro_component_opportunities (\n    mission_id,\n    opportunity_name,\n    potential_benefit,\n    why_it_matters,\n    possible_tradeoffs\n)\nSELECT\n    (x->>'mission_id')::uuid,\n    x->>'opportunity_name',\n    x->>'potential_benefit',\n    x->>'why_it_matters',\n    x->>'possible_tradeoffs'\nFROM jsonb_array_elements(\n    '{{ JSON.stringify($json.micro_component_opportunities).replace(/'/g, \"''\") }}'::jsonb\n) x;\nINSERT INTO engineering_inventory (\n    mission_id,\n    asset_name,\n    asset_type,\n    description,\n    primary_function,\n    source_category\n)\nSELECT\n    (x->>'mission_id')::uuid,\n    x->>'asset_name',\n    x->>'asset_type',\n    x->>'description',\n    x->>'primary_function',\n    x->>'source_category'\nFROM jsonb_array_elements(\n    '{{ JSON.stringify($json.engineering_inventory).replace(/'/g, \"''\") }}'::jsonb\n) x;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -5120,
+        80
+      ],
+      "id": "0de3f7f1-1423-4541-99e1-c4f9aba878c9",
+      "name": "update mission libraries",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Update assembly tables only when asset_type = 'assembly'\n\nUPDATE assembly_library\nSET download_url = '{{ $json.body.archive_url }}'\nWHERE '{{ $(\"Loop Over Items\").item.json.asset_type }}' = 'assembly'\nAND assembly_name = '{{ $(\"Loop Over Items\").item.json.asset_name }}';\n\nUPDATE related_systems\nSET download_url = '{{ $json.body.archive_url }}'\nWHERE '{{ $(\"Loop Over Items\").item.json.asset_type }}' = 'assembly'\nAND assembly_name = '{{ $(\"Loop Over Items\").item.json.asset_name }}';\n\n-- Update component tables only when asset_type = 'component'\n\nUPDATE component_library\nSET download_url = '{{ $json.body.archive_url }}'\nWHERE '{{ $(\"Loop Over Items\").item.json.asset_type }}' = 'component'\nAND component_name = '{{ $(\"Loop Over Items\").item.json.asset_name }}';\n\nUPDATE available_components\nSET download_url = '{{ $json.body.archive_url }}'\nWHERE '{{ $(\"Loop Over Items\").item.json.asset_type }}' = 'component'\nAND component_name = '{{ $(\"Loop Over Items\").item.json.asset_name }}';\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1152,
+        -224
+      ],
+      "id": "a9b0f4f2-32d9-45ac-982c-31b639ea41f7",
+      "name": "update downlaod url in the library",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.organic_results[0].url }}",
+        "additionalFields": {
+          "extractRules": "{\n  \"models\": {\n    \"selector\": \"[ng-repeat='model in models']\",\n    \"type\": \"list\",\n    \"output\": {\n      \"title\": {\n        \"selector\": \".name\"\n      },\n      \"url\": {\n        \"selector\": \"a\",\n        \"output\": \"@href\"\n      }\n    }\n  }\n}",
+          "jsonResponse": true,
+          "premiumProxy": true,
+          "renderJs": true,
+          "stealthProxy": true,
+          "wait": 5000
+        }
+      },
+      "type": "n8n-nodes-scrapingbee.ScrapingBee",
+      "typeVersion": 1,
+      "position": [
+        -2192,
+        -208
+      ],
+      "id": "4b472b9e-4975-4aec-b2d9-627380c605e5",
+      "name": "get the links of all models"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.api }}",
+        "additionalFields": {
+          "cookies": "_grabcad_session=a31d345525f3c4bc9ce0781c6222f5b6; XSRF-TOKEN=O%2B6trkYbkt%2BYDiOT0DDqBl46flBE5t4fYoOHLGt8smRlN8xexk8XRX5UP864PZ4V9jvYibz22JLw80GJs8UViA%3D%3D",
+          "jsonResponse": true,
+          "premiumProxy": true,
+          "renderJs": false,
+          "stealthProxy": true
+        }
+      },
+      "type": "n8n-nodes-scrapingbee.ScrapingBee",
+      "typeVersion": 1,
+      "position": [
+        -1472,
+        -224
+      ],
+      "id": "13bf91ec-3e5e-41a5-85d8-26afa821fb81",
+      "name": "Scrape using HTML API"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "55650b87-a7fb-4483-8a6d-858dc0e2f60b",
+              "name": "asset_type",
+              "value": "assembly",
+              "type": "string"
+            },
+            {
+              "id": "a84a05a1-f09a-4bd0-b279-9433b89cd1ef",
+              "name": "asset_name",
+              "value": "PackBot",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3424,
+        -208
+      ],
+      "id": "d5449db5-328a-4d05-9e35-3a9c99b1ecb5",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n\n    let url = item.json.organic_results[0].url || item.json.url;\n\n    if (\n        url &&\n        url.includes(\"grabcad.com\") &&\n        url.endsWith(\"/files\")\n    ) {\n        url = url.replace(/\\/files\\/?$/, \"\");\n    }\n\n    item.json.organic_results[0].url = url;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2288,
+        16
+      ],
+      "id": "a0d1230c-3d30-4e0e-b324-443c39a14b97",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "jsCode": "function getSlug(pageUrl) {\n    return pageUrl.split('/').pop();\n}\n\nconst slug = getSlug(\n    $input.first().json.organic_results[0].url\n);\n\nconst apiUrl =\n    `https://grabcad.com/community/api/v1/models/${slug}?extended=true`;\n// irobot-roomba-8xx-series-handle-1\nreturn {\n  api : apiUrl\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2048,
+        16
+      ],
+      "id": "24a977b1-b4e0-4ff6-b234-4a082fdbbf20",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.api }}",
+        "additionalFields": {
+          "cookies": "_grabcad_session=a31d345525f3c4bc9ce0781c6222f5b6; XSRF-TOKEN=1tlz0wBX7yPoiBfOz28NZ4XOtVVGmnlr348iwzoii5aIABIjgANquQ7SC5OnYnl0Lc8TjL6Kf%2BZN%2F%2BRm4psseg%3D%3D",
+          "premiumProxy": true,
+          "renderJs": false,
+          "stealthProxy": true
+        }
+      },
+      "type": "n8n-nodes-scrapingbee.ScrapingBee",
+      "typeVersion": 1,
+      "position": [
+        -1840,
+        16
+      ],
+      "id": "4a9c555b-adbf-420a-9885-dd806981c336",
+      "name": "Scrape using HTML API1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "library-engine",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -4432,
+        1312
+      ],
+      "id": "954a36c7-3425-4472-91ee-4d6c8ee38bde",
+      "name": "Webhook",
+      "webhookId": "2f0660ea-c987-41fe-b49b-e6a179b0688a"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=scinece field : {{ $json.body['science field'] }}, mission year : {{ $json.body['mission year'] }}, mission : {{ $json.body.mission }}, constraints : {{ $json.body.constraints }} and requirements : {{ $json.body.requirements }}"
+            },
+            {
+              "role": "system",
+              "content": "=ROLE\n\nYou are Friday's Historical Model Discovery Engine.\n\nYour responsibility is to discover REAL historical engineering models that existed before or around the mission timeline.\n\nYou NEVER invent models.\n\nYou NEVER create fictional technologies.\n\nYou NEVER generate educational examples.\n\nYou ONLY identify historically accurate engineering models.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nINPUT\n\nYou will receive:\n\n{\n    \"science_field\": \"{{$json.body['science field']}}\",\n\n    \"mission_year\": {{$json.body['mission year']}},\n\n    \"mission\": \"{{$json.body.mission}}\",\n\n    \"constraints\": {{$json.body.constraints}},\n\n    \"requirements\": {{$json.body.requirements}}\n}\n\nExample\n\n{\n    \"science_field\": \"Automotive Engineering\",\n\n    \"mission_year\": 1990,\n\n    \"mission\": \"Develop a lightweight fuel-efficient gasoline engine.\",\n\n    \"constraints\":[\n        ...\n    ],\n\n    \"requirements\":[\n        ...\n    ]\n}\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nPRIMARY OBJECTIVE\n\nDiscover the historical engineering models that would help an engineer understand the evolution of the given mission.\n\nThe selected models should represent the engineering progression that naturally leads toward the mission.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nMODEL SELECTION RULES\n\nEvery selected model MUST satisfy ALL conditions.\n\n1.\n\nThe model must have actually existed.\n\n2.\n\nThe model must be historically verifiable.\n\n3.\n\nThe model must belong to the specified science field.\n\n4.\n\nThe model must have engineering relevance to the mission.\n\n5.\n\nThe model should contribute meaningful engineering ideas toward solving the mission.\n\n6.\n\nDo NOT include unrelated famous models.\n\n7.\n\nDo NOT include fictional concepts.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nTIMELINE RULES\n\nMission Year represents the engineering period.\n\nThe discovered models should satisfy:\n\n• Prefer models developed BEFORE the mission year.\n\n• Models may include the mission year if historically appropriate.\n\n• Never include models developed AFTER the mission year.\n\n• Search approximately 30–70 years before the mission when appropriate.\n\n• Return models in chronological order.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nENGINEERING RELEVANCE\n\nModels should contribute toward one or more of:\n\n• engineering architecture\n\n• engineering methodology\n\n• manufacturing evolution\n\n• scientific breakthroughs\n\n• performance improvements\n\n• reliability improvements\n\n• efficiency improvements\n\n• safety improvements\n\n• material evolution\n\n• control evolution\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nMODEL GRANULARITY\n\nPrefer engineering systems instead of entire products whenever appropriate.\n\nGood\n\nOtto Engine\n\nDiesel Engine\n\nWankel Engine\n\nElectronic Fuel Injection\n\nMonocoque Chassis\n\nTurbocharger\n\nJet Engine\n\nFly-by-Wire\n\nBad\n\nToyota Corolla\n\nBMW 3 Series\n\nFord Mustang\n\nunless the complete product itself represents a major engineering milestone.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nOUTPUT SIZE\n\nReturn between 5 and 20 models.\n\nReturn only models that meaningfully contribute toward understanding the mission.\n\nDo NOT force a fixed number.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nOUTPUT FORMAT\n\nReturn ONLY valid JSON.\n\n{\n    \"science_field\": \"\",\n\n    \"mission_year\": 0,\n\n    \"models\":[\n\n        {\n            \"name\":\"\",\n\n            \"year\":0,\n\n            \"category\":\"\",\n\n            \"why_relevant\":\"\"\n        }\n\n    ]\n}\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nCATEGORY EXAMPLES\n\nEngine\n\nStructure\n\nControl System\n\nPowertrain\n\nManufacturing\n\nPropulsion\n\nMaterial\n\nElectronics\n\nMechanism\n\nSensor\n\nCommunication\n\nEnergy Storage\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nWHY_RELEVANT\n\nThe explanation should be one concise sentence describing why this model contributes toward the mission.\n\nDo NOT explain the entire model.\n\nExample:\n\n\"Introduced practical four-stroke combustion.\"\n\n\"Improved engine breathing through multi-valve architecture.\"\n\n\"Established modern monocoque structural design.\"\n\n\"Introduced electronic fuel control.\"\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nCRITICAL RESTRICTIONS\n\nNEVER\n\n• invent historical models\n\n• invent years\n\n• include future technologies\n\n• include fictional engineering systems\n\n• include models unrelated to the mission\n\n• output markdown\n\n• output explanations outside JSON\n\nReturn ONLY the JSON object."
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        -4224,
+        1312
+      ],
+      "id": "636fe2fd-0edf-4ec1-84ff-e354e2d8e541",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "SuFvr8S7usZKS2Qj",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse the JSON string\nconst data = JSON.parse($input.first().json.output[0].content[0].text);\n\n// Return a SINGLE item containing all models\nreturn [\n  {\n    json: {\n      science_field: data.science_field,\n      mission_year: data.mission_year,\n      ai_models: data.models.map(model => ({\n        model_name: model.name,\n        model_year: model.year,\n        category: model.category,\n        why_relevant: model.why_relevant\n      }))\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3872,
+        1312
+      ],
+      "id": "542507d9-44f4-43d6-8602-d7ab7823d3e1",
+      "name": "Code in JavaScript6"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT model_name\nFROM historical_models\nWHERE science_field='robotics';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3632,
+        1312
+      ],
+      "id": "f97f6489-01e2-4638-a23a-c865751bfe07",
+      "name": "Execute a SQL query",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// AI models array\nconst aiModels = $('Code in JavaScript6').first().json.ai_models;\n\n// Database models (can be null)\nconst dbModels = null;\n\n// Create a Set of existing model names\nconst existing = new Set(\n  (dbModels ?? [])\n    .map(item => item.model_name.toLowerCase())\n);\n\n// Arrays to hold results\nconst found = [];\nconst missing = [];\n\n// Compare\nfor (const model of aiModels) {\n\n  if (existing.has(model.model_name.toLowerCase())) {\n    found.push(model);\n  } else {\n    missing.push(model);\n  }\n\n}\n\n// Return as ONE n8n item\nreturn [\n  {\n    json: {\n      found_models: found,\n      missing_models: missing\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3408,
+        1312
+      ],
+      "id": "91f22efa-774b-4cfd-bbfb-3c6975018f62",
+      "name": "Code in JavaScript7"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=science field :{{ $('Code in JavaScript6').item.json.science_field }}, model name : {{ $json.model_name }}, model year : {{ $json.model_year }}, category : {{ $json.category }}, why relevant :{{ $json.why_relevant }}"
+            },
+            {
+              "role": "system",
+              "content": "=ROLE\n\nYou are Friday's Historical Model Science Analysis Engine.\n\nYour responsibility is to analyze ONE real historical engineering model and generate the engineering knowledge required to populate the Historical Model Science database.\n\nYou are NOT an engineering teacher.\n\nYou are NOT a historian.\n\nYou are NOT a storyteller.\n\nYou are an engineering analyst whose responsibility is to explain WHY engineers designed this model the way they did.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nINPUT\n\nYou will receive:\n\n{\n    \"science_field\": \"{{ $('Code in JavaScript6').item.json.science_field }}\",\n\n    \"model_name\": \"{{ $json.model_name }}\",\n\n    \"model_year\": {{ $json.model_year }},\n\n    \"category\": \"{{ $json.category }}\",\n\n    \"why_relevant\": \"{{ $json.why_relevant }}\"\n}\n\nExample\n\n{\n    \"science_field\":\"Automotive Engineering\",\n\n    \"model_name\":\"16-Valve Engine\",\n\n    \"model_year\":1985,\n\n    \"category\":\"Engine\",\n\n    \"why_relevant\":\"Improved engine breathing through multi-valve architecture.\"\n}\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nPRIMARY OBJECTIVE\n\nAnalyze the historical engineering model and identify the MAJOR ENGINEERING GOALS that defined its design.\n\nEach engineering goal should represent one important engineering objective that engineers attempted to achieve.\n\nEvery engineering goal will become one row in the Historical Model Science table.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nENGINEERING GOAL RULES\n\nOnly include MAJOR engineering goals.\n\nGood examples\n\n• Increase Airflow\n\n• Improve Combustion\n\n• Reduce Structural Weight\n\n• Increase Stability\n\n• Improve Cooling\n\n• Improve Reliability\n\nBad examples\n\n• Add one more bolt\n\n• Change piston color\n\n• Improve appearance\n\nReturn between 3 and 10 engineering goals depending on the model.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nFOR EACH ENGINEERING GOAL\n\nGenerate the following fields.\n\n1.\n\nEngineering Goal\n\nThe engineering objective.\n\n2.\n\nDesign Philosophy\n\nThe overall design philosophy adopted to achieve this goal.\n\n3.\n\nEngineering Rationale\n\nExplain WHY engineers selected this design approach.\n\nFocus on engineering reasoning rather than scientific theory.\n\n4.\n\nEngineering Constraints\n\nList the important engineering limitations that influenced the design.\n\nExamples\n\n• manufacturing precision\n\n• material strength\n\n• weight\n\n• cost\n\n• cooling\n\n• available technology\n\nDo NOT include generic physics.\n\n5.\n\nAlternatives Considered\n\nDescribe other realistic engineering approaches that could have been used and explain briefly why they were not selected.\n\nDo NOT invent unrealistic alternatives.\n\n6.\n\nKey Innovation\n\nIdentify the primary engineering innovation introduced while achieving this goal.\n\nOnly include innovations that are historically accurate.\n\n7.\n\nEngineering Impact\n\nExplain how this engineering goal influenced later engineering designs or future technologies.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIMPORTANT RESTRICTIONS\n\nDO NOT\n\n• Explain Newton's Laws\n\n• Explain Thermodynamics\n\n• Explain Fluid Mechanics\n\n• Explain Mathematics\n\n• Explain generic engineering principles\n\nAssume Jarvis already knows all of these.\n\nONLY generate knowledge that is UNIQUE to this historical model.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nQUALITY REQUIREMENTS\n\nThe generated knowledge should help Jarvis answer questions like:\n\n• Why did engineers design it this way?\n\n• Why not another approach?\n\n• What problem was this solving?\n\n• What limitations shaped the design?\n\n• What innovation did this introduce?\n\n• How did it influence later technology?\n\nIf a field does not contribute toward answering those questions, omit it.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nOUTPUT STRUCTURE\n\nEach engineering goal represents ONE independent engineering problem solved by the historical model.\n\nEvery engineering goal MUST generate its OWN:\n\n• Design Philosophy\n\n• Engineering Rationale\n\n• Engineering Constraints\n\n• Alternatives Considered\n\n• Key Innovation\n\n• Engineering Impact\n\nThese fields MUST be specific to that engineering goal only.\n\nDo NOT reuse or duplicate information across different engineering goals unless historically unavoidable.\n\nThink of every engineering goal as producing ONE independent database row.\n\nExample\n\nHistorical Model\n\n↓\n\nEngineering Goal 1\n\n↓\n\nDesign Philosophy A\n\nEngineering Rationale A\n\nEngineering Constraints A\n\nAlternatives Considered A\n\nKey Innovation A\n\nEngineering Impact A\n\n-------------------------\n\nEngineering Goal 2\n\n↓\n\nDesign Philosophy B\n\nEngineering Rationale B\n\nEngineering Constraints B\n\nAlternatives Considered B\n\nKey Innovation B\n\nEngineering Impact B\n\n-------------------------\n\nEngineering Goal 3\n\n↓\n\n...\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nOUTPUT FORMAT\n\nReturn ONLY valid JSON.\n\n{\n    \"model_name\":\"\",\n\n    \"engineering_goals\":[\n\n        {\n\n            \"engineering_goal\":\"\",\n\n            \"design_philosophy\":\"\",\n\n            \"engineering_rationale\":\"\",\n\n            \"engineering_constraints\":\"\",\n\n            \"alternatives_considered\":\"\",\n\n            \"key_innovation\":\"\",\n\n            \"engineering_impact\":\"\"\n\n        }\n\n    ]\n}\n\nThe number of objects inside \"engineering_goals\" determines the number of rows that will be inserted into the Historical Model Science table.\n\nGenerate one complete object for every major engineering goal.\n\nNever merge multiple engineering goals into one object.\n\nNever share the same Design Philosophy, Engineering Rationale, Constraints, Innovation, or Impact between different engineering goals unless they are genuinely identical from a historical engineering perspective.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nCRITICAL REQUIREMENTS\n\n• Return ONLY valid JSON.\n\n• Do NOT output markdown.\n\n• Do NOT output explanations.\n\n• Do NOT repeat the input.\n\n• Do NOT invent fictional engineering history.\n\n• Every engineering goal must be historically accurate.\n\n• Multiple engineering goals must NOT duplicate one another.\n\nEach engineering goal should describe a different engineering objective of the historical model."
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        -2800,
+        1152
+      ],
+      "id": "81286cf7-5039-47c3-bc9b-cda246dcb02e",
+      "name": "Message a model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "SuFvr8S7usZKS2Qj",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const models = $input.first().json.missing_models ;\n\n// Convert each model into an individual n8n item\nreturn models.map(model => ({\n  json: model\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3040,
+        1152
+      ],
+      "id": "f334e216-a1ff-4d75-be70-e81c2f8f3197",
+      "name": "Code in JavaScript8"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO historical_models (\n    model_name,\n    science_field,\n    model_year,\n    category,\n    why_relevant\n)\nVALUES (\n    '{{ $(\"Code in JavaScript8\").item.json.model_name }}',\n    '{{ $(\"Code in JavaScript6\").item.json.science_field }}',\n    {{ $(\"Code in JavaScript8\").item.json.model_year }},\n    '{{ $(\"Code in JavaScript8\").item.json.category }}',\n    '{{ $(\"Code in JavaScript8\").item.json.why_relevant }}'\n)\nRETURNING\n    id AS historical_model_id;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2368,
+        1152
+      ],
+      "id": "059eb421-c598-4b82-9525-db22c86212cf",
+      "name": "Execute a SQL query1",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n    m.id AS mission_id\nFROM missions m\nJOIN assessment_sessions a\n    ON m.assessment_session_id = a.id\nWHERE a.user_id = '{{ $('Webhook').item.json.body.id }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2096,
+        1152
+      ],
+      "id": "fe600e35-9acf-446b-a212-281fad543944",
+      "name": "Execute a SQL query2",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO historical_model_science (\n    historical_model_id,\n    model_name,\n    engineering_goal,\n    design_philosophy,\n    engineering_rationale,\n    engineering_constraints,\n    alternatives_considered,\n    key_innovation,\n    engineering_impact\n)\n\nSELECT\n    hm.id,\n    '{{ $json.model_name.replace(/'/g, \"''\") }}',\n    '{{ $json.engineering_goal.replace(/'/g, \"''\") }}',\n    '{{ $json.design_philosophy.replace(/'/g, \"''\") }}',\n    '{{ $json.engineering_rationale.replace(/'/g, \"''\") }}',\n    '{{ $json.engineering_constraints.replace(/'/g, \"''\") }}',\n    '{{ $json.alternatives_considered.replace(/'/g, \"''\") }}',\n    '{{ $json.key_innovation.replace(/'/g, \"''\") }}',\n    '{{ $json.engineering_impact.replace(/'/g, \"''\") }}'\n\nFROM historical_models hm\n\nWHERE hm.model_name = '{{ $json.model_name }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1376,
+        1152
+      ],
+      "id": "2e87838f-f3d5-47bb-b456-3814371a3967",
+      "name": "Execute a SQL query3",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = [];\n\nconst input = $('Message a model1').all();\n\nfor (const item of input) {\n\n    const data = JSON.parse(item.json.output[0].content[0].text);\n\n    for (const goal of data.engineering_goals) {\n\n        output.push({\n            json: {\n\n                model_name: data.model_name,\n\n                engineering_goal: goal.engineering_goal,\n\n                design_philosophy: goal.design_philosophy,\n\n                engineering_rationale: goal.engineering_rationale,\n\n                engineering_constraints: goal.engineering_constraints,\n\n                alternatives_considered: goal.alternatives_considered,\n\n                key_innovation: goal.key_innovation,\n\n                engineering_impact: goal.engineering_impact\n\n            }\n        });\n\n    }\n\n}\n\nreturn output;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1600,
+        1152
+      ],
+      "id": "5c1c1a43-e6ce-439a-86ec-ade84e54db19",
+      "name": "Code in JavaScript10"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO mission_historical_models (\n    mission_id,\n    historical_model_id\n)\n\nSELECT\n    '{{ $json.mission_id }}',\n    hm.id\n\nFROM historical_models hm\n\nWHERE\n    hm.model_name = '{{ $('Code in JavaScript8').item.json.model_name.replace(/'/g, \"''\") }}'\nAND hm.science_field = '{{ $('Code in JavaScript6').item.json.science_field.replace(/'/g, \"''\") }}'\n\nON CONFLICT (mission_id, historical_model_id)\nDO NOTHING;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1840,
+        1152
+      ],
+      "id": "ea600f50-a34b-42f1-bc66-221314a5e4b0",
+      "name": "Execute a SQL query4",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO mission_historical_models (\n    mission_id,\n    historical_model_id\n)\n\nSELECT\n    '{{ $json.mission_id }}',\n    hm.id\n\nFROM historical_models hm\n\nWHERE hm.model_name = '{{ $('Code in JavaScript11').model_name.replace(/'/g, \"''\") }}'\n  AND hm.science_field = '{{ $('Code in JavaScript6').science_field.replace(/'/g, \"''\") }}'\n\nON CONFLICT (mission_id, historical_model_id)\nDO NOTHING;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2576,
+        1472
+      ],
+      "id": "6b3ba25f-94d2-4a53-bd21-36ba0aca6b02",
+      "name": "Execute a SQL query5",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const models = $input.first().json.found_models ;\n\n// Convert each model into an individual n8n item\nreturn models.map(model => ({\n  json: model\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3024,
+        1472
+      ],
+      "id": "c35fce7b-34ee-4c9d-bfd1-519096b04a8a",
+      "name": "Code in JavaScript11",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n    m.id AS mission_id\nFROM missions m\nJOIN assessment_sessions a\n    ON m.assessment_session_id = a.id\nWHERE a.user_id = '{{ $('Webhook').item.json.body.id }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2816,
+        1472
+      ],
+      "id": "2bcd97e8-14f9-40db-a2eb-0b489e47d553",
+      "name": "Execute a SQL query6",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "stem2125.app.n8n.cloud",
+            "user-agent": "n8n",
+            "content-length": "1094",
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "9.223.34.54",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "SE",
+            "cf-ray": "a1e36d95bfb6e4cd-RIX",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "x-forwarded-for": "9.223.34.54, 162.158.48.172",
+            "x-forwarded-host": "stem2125.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-swc-37-c6fbbc655-qqcmm",
+            "x-is-trusted": "yes",
+            "x-real-ip": "9.223.34.54"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "science field": "robotics",
+            "mission year": "2005",
+            "mission": "Design a mobile robotic system capable of navigating uneven terrain while carrying a payload of up to 5 kg.",
+            "constraints": "[   \"Maximum weight of the robotic system must not exceed 15 kg.\",   \"Available battery technology provides approximately 40-60 Wh/kg of energy density.\",   \"The robot must be able to traverse slopes of up to 30 degrees.\",   \"All components must fit within a maximum foot print of 1.5 m x 1.5 m.\",   \"The robot's operational time must be at least 30 minutes on a full charge.\",   \"Wheel or mobility mechanism must be capable of handling obstacles up to 10 cm in height.\" ]",
+            "requirements": "[   \"The system must maintain a speed of at least 0.5 m/s on a flat surface.\",   \"The robot must return to its starting point autonomously after delivering the payload.\",   \"The system must exhibit consistent navigation accuracy within ±0.1 m.\",   \"The robot must successfully navigate a predefined course with obstacles without manual intervention.\" ]",
+            "id": "0122be0b-3318-470f-98fd-5b718ff9a548"
+          },
+          "webhookUrl": "https://stem2125.app.n8n.cloud/webhook-test/library-engine",
+          "executionMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "library creator": {
+      "main": [
+        [
+          {
+            "node": "mission knowledge pack generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "update artifact and component details",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "update mission library",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "link confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "update confirmed link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update artifact and component details": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mission knowledge pack generator": {
+      "main": [
+        [
+          {
+            "node": "create a structed knowledge pack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update confirmed link": {
+      "main": [
+        [
+          {
+            "node": "update mission library",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "link confirmation": {
+      "main": [
+        [
+          {
+            "node": "update mission library",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "list of assesmblies and components": {
+      "main": [
+        [
+          {
+            "node": "check global library",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create a structed knowledge pack": {
+      "main": [
+        [
+          {
+            "node": "update mission libraries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "separate present and mission items": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create search queries": {
+      "main": [
+        [
+          {
+            "node": "searcg for pending assets_source_matches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "searcg for pending assets_source_matches": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "create search queries",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get SERP data using GOOGLE SEARCH API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get SERP data using GOOGLE SEARCH API": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "get the links of all models",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Scrape using HTML API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check global library": {
+      "main": [
+        [
+          {
+            "node": "separate present and mission items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update mission libraries": {
+      "main": [
+        [
+          {
+            "node": "list of assesmblies and components",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update downlaod url in the library": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get the links of all models": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape using HTML API": {
+      "main": [
+        [
+          {
+            "node": "update downlaod url in the library",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Scrape using HTML API1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape using HTML API1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript6": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript7": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript8",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code in JavaScript11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript8": {
+      "main": [
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query1": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query2": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript10": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query4": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript11": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query6": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "2ae3fdf0-3180-4b4e-9a3c-1bdf479a09b3",
+  "meta": {
+    "instanceId": "f2fd0c3a8521fb46d62913185c113c8c355595662ce2bd510de0b6e3764f4e0b"
+  },
+  "nodeGroups": [],
+  "id": "wurwCnsbvBPJcOwq",
+  "tags": []
+}

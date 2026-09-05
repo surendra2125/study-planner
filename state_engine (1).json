@@ -1,0 +1,95 @@
+{
+  "name": "state_engine",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "7427e9c4-f5c3-472e-81ec-8bf234005432",
+      "name": "COMPONENT_MODIFIER1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "state_engine",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -3056,
+        16
+      ],
+      "id": "4c7ee417-76b6-4afa-ab88-c96fca900e72",
+      "name": "Webhook",
+      "webhookId": "6593dd58-95a5-4505-b472-129ab82b509e"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT update_student_state(\n    '{{ $json.body.id }}',\n    '{{ $json.body.state_event }}'\n);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2736,
+        16
+      ],
+      "id": "014edec9-5e7d-4275-bb69-63d07e2058f8",
+      "name": "update student state",
+      "credentials": {
+        "postgres": {
+          "id": "o2XuNrF3fvDmyl7w",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "update student state",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update student state": {
+      "main": [
+        [
+          {
+            "node": "COMPONENT_MODIFIER1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "0b30693d-4002-4eeb-8e9d-b06b97302def",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d6429aebd45b92c4b8be69d304193a681dea7bae217a3d7f880f7dc1426e618f"
+  },
+  "nodeGroups": [],
+  "id": "Tgwlx1pwOT9v34sK",
+  "tags": []
+}

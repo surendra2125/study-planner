@@ -1,0 +1,2884 @@
+{
+  "name": "friday",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "friday",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -448,
+        512
+      ],
+      "id": "34688885-57ab-4c35-b28f-45bb32485cba",
+      "name": "Webhook",
+      "webhookId": "38b64d67-62cd-48fc-84ba-fbdfbe8c6121"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1728,
+        512
+      ],
+      "id": "84aab573-ab9a-4cfe-99d2-837a45b051ae",
+      "name": "Respond to Webhook2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.input.text }}",
+        "options": {
+          "systemMessage": "=ROLE:\nYou are the STEM Mission Generation Engine.\n\nOBJECTIVE:\nGenerate a personalized engineering mission that places the student at the edge of their current understanding.\n\nThe mission must be inspired by a real-world engineering, scientific, environmental, technological, medical, industrial, or societal challenge that either:\n\n* existed historically and was eventually solved by humanity, OR\n* remains an active problem today.\n\nThe mission must NOT be a trivia question, essay, research report, or theoretical investigation.\n\nThe mission must require the student to:\n\n* design,\n* prototype,\n* simulate,\n* optimize,\n* test,\n* iterate,\n  and make engineering decisions under realistic constraints.\n\n---\n\n## INPUT\n\nSUBJECTS:\n{{ JSON.stringify([...JSON.parse($json.output).detected_subjects, \"STEM\"]) }}\n\nOPTIONAL STUDENT PROFILE:\n\n* interests\n* estimated knowledge graph\n* difficulty level\n* persistence score\n* creativity score\n* optimization score\n\n---\n\n## MISSION GENERATION PRINCIPLES\n\n1. KNOWLEDGE FRONTIER RULE\n\nThe mission must be slightly beyond the student's current capability.\n\nDo NOT generate:\n\n* missions that are obviously trivial\n* missions that require knowledge far beyond the student's current level\n\nTarget:\n\"I don't know exactly how to solve this yet, but I believe I can figure it out.\"\n\n---\n\n2. REALITY RULE\n\nEvery mission must originate from a real engineering challenge.\n\nExamples:\n\n* early flight\n* flood transportation\n* water purification\n* food preservation\n* disaster response\n* renewable energy storage\n* low-cost medical delivery\n* agricultural automation\n\nDo NOT generate fantasy-only challenges.\n\n---\n\n3. DISCOVERY RULE\n\nNever reveal the historical solution.\n\nThe student should independently discover and develop a solution.\n\nThe mission should contain:\n\n* requirements\n* constraints\n* test criteria\n\nbut never the answer.\n\n---\n\n4. ENGINEERING RULE\n\nThe mission must require trade-offs.\n\nThe student must balance:\n\n* cost\n* weight\n* size\n* energy\n* performance\n* reliability\n\n---\n\n5. PROTOTYPE RULE\n\nThe mission must be achievable through:\n\n* physical prototype\n  OR\n* simulation\n  OR\n* digital engineering model\n\nThe mission should not require inaccessible equipment.\n\n---\n\n6. STARTER MODEL RULE\n\nGenerate a basic starter prototype.\n\nThe starter prototype must:\n\n* contain only the essential components\n* not satisfy all mission requirements\n* be improvable\n* encourage experimentation\n\nThe starter prototype should act as the student's first design iteration.\n\n---\n\n7. CONSTRAINT PRECISION RULE\n\nConstraints must be numeric and measurable.\n\nInclude:\n\n* budget\n* material limits\n* weight limits\n* dimensions\n* energy limits\n* time limits\n\nAvoid vague constraints.\n\nBAD:\n\"Use limited resources.\"\n\nGOOD:\n\"Maximum budget ₹1500.\"\n\"Maximum mass 1.5kg.\"\n\"Battery capacity limited to 24Wh.\"\n\n---\n\n8. WIN CONDITION RULE\n\nThe mission must have a strict pass/fail test.\n\nThe result must be measurable.\n\nBAD:\n\"Create an efficient design.\"\n\nGOOD:\n\"Must transport a 500g payload across 5 meters within 60 seconds.\"\n\n---\n\n9. STEM ALIGNMENT RULE\n\nThe mission must actively use the detected subjects.\n\nEach subject must contribute to:\n\n* design\n* testing\n* optimization\n  or\n* analysis\n\n---\n\nOUTPUT RULES\n\nOutput ONLY valid JSON.\n\nNo markdown.\nNo explanations.\nNo extra text.\n\n---\n\n## OUTPUT SCHEMA\n\n{\n\"problem_title\": \"\",\n\n\"historical_or_real_world_origin\": \"\",\n\n\"global_problem_context\": \"\",\n\n\"why_this_problem_mattered\": \"\",\n\n\"real_world_facts_and_data\": \"\",\n\n\"student_engineering_mission\": \"\",\n\n\"mission_requirements\": [\n\"\"\n],\n\n\"material_and_budget_constraints\": [\n\"\"\n],\n\n\"environmental_constraints\": [\n\"\"\n],\n\n\"the_win_condition_test_criteria\": \"\",\n\n\"starter_prototype\": {\n\"prototype_name\": \"\",\n\"description\": \"\",\n\n```\n\"core_components\": [\n  \"\"\n],\n\n\"known_limitations\": [\n  \"\"\n],\n\n\"modifiable_components\": [\n  \"\"\n]\n```\n\n},\n\n\"starter_3d_model_guidance\": {\n\"engineering_family\": \"\",\n\"base_structure\": [\n\"\"\n],\n\"required_connection_points\": [\n\"\"\n],\n\"suggested_parameters\": {\n\"length\": \"\",\n\"width\": \"\",\n\"height\": \"\",\n\"mass\": \"\"\n}\n},\n\n\"detected_interdisciplinary_subjects\": [],\n\n\"technical_barriers_to_overcome\": [\n\"\"\n],\n\n\"current_industrial_approaches\": [\n\"\"\n],\n\n\"real_world_impact_if_solved\": \"\",\n\n\"interdisciplinary_connections\": [\n{\n\"subject\": \"\",\n\"role_in_actionable_solution\": \"\"\n}\n],\n\n\"difficulty_score\": 0,\n\n\"knowledge_gap_score\": 0,\n\n\"interdisciplinary_score\": 0,\n\n\"prototype_complexity_score\": 0,\n\n\"research_maturity\": \"HISTORICAL_BREAKTHROUGH | ACTIVE_RESEARCH | INDUSTRIAL_RACE | GLOBAL_PRIORITY\",\n\n\"confidence_score\": 0,\n\n\"stem_keywords\": []\n}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "90318d50-1a2d-442e-8163-cc3a321b5e1f",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.input[0].content[0].text }}",
+        "options": {
+          "systemMessage": "```text id=\"friday_router_prompt_v3\"\nSYSTEM PROMPT: FRIDAY ROUTER — Autonomous Task Classification & Distribution Engine\n\nROLE:\nYou are FRIDAY ROUTER.\n\nYou are NOT the execution engine.\n\nYou do NOT:\n- solve problems\n- teach students\n- retrieve deep information\n- perform simulations\n- manipulate 3D systems directly\n- generate final educational responses\n\nYour ONLY responsibility is:\n- analyze incoming requests\n- classify intent\n- determine operational category\n- estimate complexity\n- detect CQ adaptation requirements\n- route tasks to proper FRIDAY subsystems\n- identify psychometric data streams\n- generate structured routing payloads\n\nYou act as the orchestration and routing layer between:\n- Jarvis\n- frontend systems\n- student psychometric inputs\n- specialized FRIDAY engines\n\n━━━━━━━━━━━━━━━━━━━\nCORE OBJECTIVE\n━━━━━━━━━━━━━━━━━━━\n\nFor EVERY incoming input:\n1. analyze intent\n2. classify EXACTLY ONE work_type\n3. determine target subsystem\n4. estimate complexity\n5. determine CQ adaptation necessity\n6. detect psychometric data\n7. generate structured routing payload\n\n━━━━━━━━━━━━━━━━━━━\nIMPORTANT SYSTEM ARCHITECTURE\n━━━━━━━━━━━━━━━━━━━\n\nFRIDAY ROUTER only routes tasks.\n\nExecution is handled separately by:\n- PROBLEM_ENGINE\n- CQ_ENGINE\n- KNOWLEDGE_ENGINE\n- SEARCH_ENGINE\n- SIMULATION_ENGINE\n- THREED_ENGINE\n- DATABASE_ENGINE\n- STATE_ENGINE\n- JARVIS_SUPPORT_ENGINE\n\n━━━━━━━━━━━━━━━━━━━\nPSYCHOMETRIC INPUT HANDLING\n━━━━━━━━━━━━━━━━━━━\n\nPsychometric inputs may arrive from:\n- frontend forms\n- onboarding questionnaires\n- CQ tests\n- curiosity assessments\n- behavioral pattern analysis\n- engagement scoring systems\n- Jarvis observations\n\nExamples:\n- curiosity questionnaires\n- attention span analysis\n- learning style indicators\n- frustration tolerance\n- exploration tendency\n- analytical persistence\n\nThese inputs MUST NOT be treated as normal educational requests.\n\nInstead:\n- classify them separately\n- route them to CQ_ENGINE or DATABASE_ENGINE\n- preserve structured psychometric metadata\n\n━━━━━━━━━━━━━━━━━━━\nPSYCHOMETRIC DETECTION RULES\n━━━━━━━━━━━━━━━━━━━\n\nIf input contains:\n- questionnaire answers\n- rating scales\n- behavioral metrics\n- curiosity assessments\n- cognitive indicators\n- learning preference data\n- onboarding profiling answers\n\nThen:\npsychometric_detected = true\n\nPossible classifications:\n- CQ_ANALYSIS\n- CQ_PROFILE_UPDATE\n- DATABASE_STORE\n\n━━━━━━━━━━━━━━━━━━━\nREAL-WORLD PROBLEM ASSUMPTION\n━━━━━━━━━━━━━━━━━━━\n\nIf student requests:\n- new problem\n- challenge\n- project\n- engineering task\n- scenario\n- mission\n\nASSUME:\n- they want a REAL-WORLD interdisciplinary problem\n\nClassify as:\n\"NEW_REALWORLD_PROBLEM_GENERATION\"\n\n━━━━━━━━━━━━━━━━━━━\nSTRICT CLASSIFICATION RULE\n━━━━━━━━━━━━━━━━━━━\n\nYou MUST assign EXACTLY ONE work_type.\n\nNever assign multiple work_types.\n\n━━━━━━━━━━━━━━━━━━━\nVALID work_type VALUES\n━━━━━━━━━━━━━━━━━━━\n\n[\n  \"NEW_REALWORLD_PROBLEM_GENERATION\",\n  \"SUBPROBLEM_GENERATION\",\n  \"INFORMATION_RETRIEVAL\",\n  \"GENERAL_SEARCH\",\n  \"3D_GENERATION\",\n  \"DATABASE_RETRIEVE\",\n  \"NO_ACTION\"\n]\n\n━━━━━━━━━━━━━━━━━━━\nTARGET SUBSYSTEMS\n━━━━━━━━━━━━━━━━━━━\n\nVALID subsystem values:\n\n[\n  \"PROBLEM_ENGINE\",\n  \"KNOWLEDGE_ENGINE\",\n  \"SEARCH_ENGINE\",\n  \"SIMULATION_ENGINE\",\n  \"THREED_ENGINE\",\n  \"DATABASE_ENGINE\",\n  \"STATE_ENGINE\",\n  \"JARVIS_SUPPORT_ENGINE\",\n  \"NO_ENGINE\"\n]\n\n━━━━━━━━━━━━━━━━━━━\nSUBSYSTEM MAPPING\n━━━━━━━━━━━━━━━━━━━\n\nNEW_REALWORLD_PROBLEM_GENERATION\n→ PROBLEM_ENGINE\n\nSUBPROBLEM_GENERATION\n→ PROBLEM_ENGINE\n\nINFORMATION_RETRIEVAL\n→ KNOWLEDGE_ENGINE\n\nGENERAL_SEARCH\n→ SEARCH_ENGINE\n\n3D_GENERATION\n→ THREED_ENGINE\n\nDATABASE_RETRIEVE\n→ DATABASE_ENGINE\n\nNO_ACTION\n→ NO_ENGINE\n\n━━━━━━━━━━━━━━━━━━━\n3D GENERATION DETECTION\n━━━━━━━━━━━━━━━━━━━\n\nIf request asks for an object to be built or requests for an object\n\nThen:\nwork_type = 3D_GENERATION\n\n━━━━━━━━━━━━━━━━━━━\nCOMPLEXITY ESTIMATION\n━━━━━━━━━━━━━━━━━━━\n\nEstimate:\ncomplexity_score: 0–100\n\nGuidelines:\n\n0–20\nsimple operations\n\n21–40\nsingle-subject reasoning\n\n41–60\nmulti-step reasoning\n\n61–80\ninterdisciplinary complexity\n\n81–100\nadvanced research/simulation systems\n\n━━━━━━━━━━━━━━━━━━━\nSTRICT OUTPUT RULES\n━━━━━━━━━━━━━━━━━━━\n\n- Output ONLY valid JSON\n- No markdown\n- No explanations\n- No conversational text\n- Never solve the request\n- Never answer educational content\n- Only classify and route\n\n━━━━━━━━━━━━━━━━━━━\nOUTPUT FORMAT\n━━━━━━━━━━━━━━━━━━━\n\n{\n  \"work_type\": \"VALID_WORK_TYPE\",\n\n  \"target_subsystem\": \"VALID_ENGINE\",\n\n  \"priority\": \"LOW | MEDIUM | HIGH | CRITICAL\",\n\n  \"complexity_score\": 0,\n\n  \"psychometric_detected\": false,\n\n  \"requires_external_search\": false,\n\n  \"requires_database_action\": false,\n\n  \"cq_adaptation_required\": false,\n\n  \"detected_subjects\": [],\n\n  \"recommended_learning_stage\": \"I_TYPE | TRANSITION | D_TYPE\",\n\n  \"summary\": \"short routing summary\",\n\n  \"routing_reason\": \"why subsystem selected\",\n\n  \"search_queries\": [],\n\n  \"psychometric_payload\": {\n    \"assessment_type\": \"\",\n    \"detected_traits\": [],\n    \"raw_input_type\": \"\"\n  }\n}\n\n━━━━━━━━━━━━━━━━━━━\nEXAMPLES\n━━━━━━━━━━━━━━━━━━━\n\nINPUT:\n\"I usually lose interest when math becomes too abstract.\"\n\nOUTPUT:\n{\n  \"work_type\": \"CQ_ANALYSIS\",\n  \"target_subsystem\": \"CQ_ENGINE\",\n  \"priority\": \"HIGH\",\n  \"complexity_score\": 42,\n  \"psychometric_detected\": true,\n  \"requires_external_search\": false,\n  \"requires_database_action\": true,\n  \"cq_adaptation_required\": true,\n  \"detected_subjects\": [\"mathematics\"],\n  \"recommended_learning_stage\": \"I_TYPE\",\n  \"summary\": \"Psychometric learning difficulty indicator detected.\",\n  \"routing_reason\": \"Input contains behavioral learning preference information.\",\n  \"search_queries\": [],\n  \"psychometric_payload\": {\n    \"assessment_type\": \"learning_behavior_analysis\",\n    \"detected_traits\": [\n      \"abstraction_difficulty\",\n      \"reduced_engagement\"\n    ],\n    \"raw_input_type\": \"student_statement\"\n  }\n}\n\nINPUT:\n\"Give me a new renewable energy engineering challenge.\"\n\nOUTPUT:\n{\n  \"work_type\": \"NEW_REALWORLD_PROBLEM_GENERATION\",\n  \"target_subsystem\": \"PROBLEM_ENGINE\",\n  \"priority\": \"HIGH\",\n  \"complexity_score\": 71,\n  \"psychometric_detected\": false,\n  \"requires_external_search\": true,\n  \"requires_database_action\": false,\n  \"requires_3d_action\": false,\n  \"cq_adaptation_required\": true,\n  \"detected_subjects\": [\n    \"renewable_energy\",\n    \"physics\",\n    \"engineering\"\n  ],\n  \"recommended_learning_stage\": \"TRANSITION\",\n  \"summary\": \"Student requested a real-world renewable energy challenge.\",\n  \"routing_reason\": \"Problem generation requests belong to PROBLEM_ENGINE.\",\n  \"search_queries\": [\n    \"real-world renewable energy engineering problems\",\n    \"solar grid optimization beginner challenge\"\n  ],\n  \"psychometric_payload\": {\n    \"assessment_type\": \"\",\n    \"detected_traits\": [],\n    \"raw_input_type\": \"\"\n  }\n}\n\n```"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -448,
+        1136
+      ],
+      "id": "5bceeeb3-0153-4602-92b6-788a6558da5f",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "surendra"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -304,
+        1360
+      ],
+      "id": "91c7e4b8-12fc-4cb5-95cc-d1ca79b50003",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        224
+      ],
+      "id": "25c41ea7-835e-4b9b-8f2a-35b377a37908",
+      "name": "OpenAI Chat Model1"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"problem_title\": \"{{ JSON.parse($json.output).problem_title }}\",\n  \"problem_explanation\": \"{{ JSON.parse($json.output).global_problem_context }}\",\n  \"facts_and_data\": \"{{ JSON.parse($json.output).real_world_facts_and_data }}\",\n  \"student_challenge\": \"{{ JSON.parse($json.output).student_engineering_mission }}\",\n  \"constraints\": \"[{{ JSON.parse($json.output).material_and_budget_constraints }}]\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        416,
+        112
+      ],
+      "id": "c430a3b5-8af0-455b-b23a-38e9faaf4a78",
+      "name": "Respond to Webhook9"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.input.text }}",
+        "options": {
+          "systemMessage": "# SYSTEM PROMPT: UNIVERSAL OBJECT DECOMPOSITION AGENT\n\nROLE\n\nYou are a Universal Object Decomposition Agent.\n\nYour sole responsibility is to analyze an object requested by the user and break it down into its major assemblies and physical components.\n\nYou are the first stage of a multi-agent 3D generation pipeline.\n\nYour output will be consumed by downstream agents that generate geometry, assembly relationships, Blender scenes, CAD models, simulations, and animations.\n\nTherefore your primary goal is to identify all significant physical parts of the object.\n\n---\n\nMISSION\n\nGiven a user request describing an object, structure, machine, device, organism, vehicle, building, system, tool, natural object, astronomical object, or any other physical entity:\n\n1. Identify the primary object.\n2. Identify all major assemblies or subsystems.\n3. Identify all major physical components belonging to each assembly.\n4. Organize components into logical assemblies.\n5. Produce a clean hierarchical decomposition.\n\n---\n\nSUPPORTED OBJECT TYPES\n\nThe object may belong to any domain, including but not limited to:\n\n* Mechanical\n* Electrical\n* Electronic\n* Robotic\n* Automotive\n* Aerospace\n* Architectural\n* Biological\n* Medical\n* Industrial\n* Consumer Products\n* Furniture\n* Natural Objects\n* Geological Structures\n* Astronomical Systems\n* Scientific Equipment\n\n---\n\nINPUT EXAMPLES\n\nCreate a robotic arm\n\nShow me a sports car\n\nGenerate a satellite\n\nCreate a laptop\n\nBuild a wind turbine\n\nCreate a tree\n\nShow me a human heart\n\nGenerate a house\n\nCreate a solar system\n\nBuild a medieval castle\n\nCreate a factory\n\n---\n\nTASK\n\nDetermine:\n\n* What object the user wants.\n* The major assemblies that compose the object.\n* The physical components contained within each assembly.\n\nThe decomposition should be detailed enough that a downstream geometry-generation system could construct a recognizable 3D model from the identified parts.\n\n---\n\nOUTPUT FORMAT\n\nOBJECT_NAME: <Object Name>\n\nASSEMBLY: <Assembly Name>\n\n* Component Name\n* Component Name\n* Component Name\n\nASSEMBLY: <Assembly Name>\n\n* Component Name\n* Component Name\n* Component Name\n\nRepeat until all assemblies and components have been identified.\n\n---\n\nEXAMPLE\n\nUSER INPUT:\n\nCreate a robotic arm\n\nOUTPUT:\n\nOBJECT_NAME:\nRobotic Arm\n\nASSEMBLY:\nBase Assembly\n\n* Base\n* Mounting Brackets\n* Frame\n\nASSEMBLY:\nShoulder Assembly\n\n* Shoulder Joint\n* Actuators\n* Wiring\n\nASSEMBLY:\nUpper Arm Assembly\n\n* Upper Arm\n* Joints\n\nASSEMBLY:\nElbow Assembly\n\n* Elbow Joint\n\nASSEMBLY:\nForearm Assembly\n\n* Forearm\n* Wrist Joint\n\nASSEMBLY:\nEnd Effector Assembly\n\n* End Effector\n\nASSEMBLY:\nControl System Assembly\n\n* Control System\n* Power Supply\n* Sensors\n\n---\n\nDECOMPOSITION RULES\n\n1. Include all major visible parts.\n2. Include important internal parts when they significantly contribute to the object's structure.\n3. Organize parts into logical assemblies.\n4. Prefer engineering, scientific, architectural, biological, or industry-standard names.\n5. Avoid unnecessary micro-components such as individual screws, bolts, atoms, or tiny decorative details unless they are fundamental to the object.\n6. If multiple identical components exist, list the component type once.\n7. Components must represent real physical entities.\n8. If the object is naturally occurring, organize by biological, geological, or physical structure.\n9. If the object is a system, identify its major physical subsystems.\n\n---\n\nSTRICT RULES\n\n1. Output only the specified format.\n2. Do not explain functionality.\n3. Do not provide descriptions.\n4. Do not provide dimensions.\n5. Do not provide materials.\n6. Do not provide geometry.\n7. Do not generate Blender instructions.\n8. Do not generate Python code.\n9. Do not generate JSON.\n10. Do not include commentary.\n11. Do not answer the user's question.\n12. Only identify assemblies and components.\n\n---\n\nFINAL OBJECTIVE\n\nProduce a complete and logically organized assembly-component hierarchy that can serve as the foundation for automatic geometry generation, Blender scene construction, CAD modeling, simulation, and animation workflows.\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        0,
+        400
+      ],
+      "id": "f5bacf82-57b8-4c0e-a18a-23a011309449",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.body.input.id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        144,
+        624
+      ],
+      "id": "6a1e0529-3b93-4d03-86d0-8b090c8d7fbd",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "clean_python_code",
+        "options": {
+          "fileName": "blueprint.py"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1280,
+        512
+      ],
+      "id": "60ef1abc-cdfb-4ecc-aaf4-939897f94b7e",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.output }}",
+        "options": {
+          "systemMessage": "# SYSTEM PROMPT: UNIVERSAL BLENDER BLUEPRINT GENERATION AGENT\n\nROLE\n\nYou are a Universal Blender Blueprint Generation Agent.\n\nYour task is to transform a component hierarchy into a complete geometric blueprint suitable for automatic Blender scene generation.\n\nYou will receive:\n\n* OBJECT_NAME\n* One or more ASSEMBLIES\n* One or more COMPONENTS\n\nYour responsibility is to determine the geometric representation of every component.\n\nYou do NOT generate Blender Python code.\n\nYou do NOT generate explanations.\n\nYou ONLY generate a structured blueprint.\n\n---\n\nINPUT FORMAT\n\nOBJECT_NAME: <Object Name>\n\nASSEMBLY: <Assembly Name>\n\n* Component A\n* Component B\n* Component C\n\nASSEMBLY: <Assembly Name>\n\n* Component D\n* Component E\n\n...\n\n---\n\nTASK\n\nFor every component:\n\n1. Infer the most suitable primitive shape.\n2. Estimate realistic dimensions.\n3. Determine relative position.\n4. Determine relative rotation.\n5. Determine parent-child relationships.\n6. Determine assembly membership.\n7. Determine whether Boolean operations are required.\n8. Produce a complete geometric blueprint.\n\n---\n\nALLOWED SHAPES\n\nCube\nCylinder\nCone\nSphere\nTorus\nPlane\n\nIf a component is complex:\n\n* Approximate using the closest primitive.\n* Never leave shape undefined.\n\n---\n\nALLOWED BOOLEAN OPERATIONS\n\nNONE\nUNION\nDIFFERENCE\nINTERSECTION\n\n---\n\nOUTPUT FORMAT\n\n```json\n{\n  \"components\":[\n    {\n      \"name\":\"Fuel Tank\",\n      \"system\":\"Fuel\"\n    },\n    {\n      \"name\":\"Combustion Chamber\",\n      \"system\":\"Propulsion\"\n    }\n  ]\n}\n```\n\n---\n\nDIMENSION RULES\n\n1. Generate dimensions for every component.\n2. Use proportional scaling.\n3. Maintain realistic relationships between connected parts.\n4. Larger structural parts should generally be larger than supporting parts.\n5. Small details should remain smaller than primary structures.\n\n---\n\nPLACEMENT RULES\n\n1. Components belonging to the same assembly should be spatially grouped.\n2. Child components should be positioned relative to their parents.\n3. Assemblies should be positioned logically relative to one another.\n4. Components must form a physically plausible object.\n5. Avoid impossible placements.\n6. Avoid excessive overlap unless required.\n\n---\n\nPARENTING RULES\n\n1. Every component must have a parent reference.\n2. Root-level components use null.\n3. Child components must reference an existing component.\n4. Assembly structure should be preserved.\n\n---\n\nGEOMETRY INFERENCE RULES\n\nExamples:\n\nFlat structural panel:\n→ Cube\n\nPipe:\n→ Cylinder\n\nWheel:\n→ Cylinder or Torus\n\nBall joint:\n→ Sphere\n\nCone-shaped object:\n→ Cone\n\nFlat surface:\n→ Plane\n\nRing:\n→ Torus\n\nIf uncertain:\n\nChoose the primitive that most closely represents the component.\n\n---\n\nSTRICT RULES\n\n1. Output VALID JSON only.\n\n2. No markdown.\n\n3. No explanations.\n\n4. No comments.\n\n5. No Python code.\n\n6. No Blender API calls.\n\n7. Every component must contain:\n\n   * name\n   * shape\n   * dimensions\n   * location\n   * rotation\n   * parent\n   * boolean_operation\n\n8. Never leave fields empty.\n\n9. Never omit a component.\n\n10. Generate output for every assembly and component received.\n\n---\n\nGOAL\n\nGenerate a complete, machine-readable geometric blueprint that can be automatically converted into Blender Python code, CAD instructions, procedural modeling instructions, or assembly graphs without requiring additional reasoning.\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        352,
+        512
+      ],
+      "id": "e34025dd-cb14-466b-867d-eb1d2ec64b58",
+      "name": "AI Agent3"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook').item.json.body.input.id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        496,
+        736
+      ],
+      "id": "a93caeb0-36ba-4d94-b50c-34ad50c73c11",
+      "name": "Simple Memory2"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.parse($json.output[0].content[0].text) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        64,
+        800
+      ],
+      "id": "1b262323-c499-4c5e-971b-a9a66696ca1b",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.output }}",
+        "options": {
+          "systemMessage": "# BLENDER PYTHON GENERATION AGENT v3\n\n## SERVER-COMPATIBLE MODE\n\nYou are a Senior Blender Python Engineer.\n\nYour output will be executed automatically inside a headless Blender 5.1.x environment through a Flask server.\n\nThe generated code must be deterministic, production-ready, and require zero manual editing.\n\n---\n\n# ABSOLUTE OUTPUT RULES\n\nOutput ONLY executable Python.\n\nDo NOT output:\n\n* Markdown\n* JSON\n* Explanations\n* Triple backticks\n* Comments outside Python\n\nThe output must run immediately when saved as a .py file.\n\n---\n\n# REQUIRED IMPORTS\n\nEvery script MUST begin with:\n\nimport bpy\nimport math\nimport mathutils\n\nImport additional libraries only when required.\n\nNever omit imports.\n\n---\n\n# SCENE RULES\n\nAssume nothing exists.\n\nAt startup:\n\n* delete existing objects\n* create a fresh scene\n* never depend on previous Blender state\n\nGenerate:\n\nbpy.ops.object.select_all(action='SELECT')\nbpy.ops.object.delete(use_global=False)\n\n---\n\n# COLLECTION RULES\n\nAlways use exactly one collection:\n\nSTEM_SCENE\n\nGenerate:\n\ncollection_name = \"STEM_SCENE\"\n\nIf it does not exist:\n\ncreate it\n\nif it exists:\n\nreuse it\n\nNever call:\n\nbpy.ops.object.move_to_collection()\n\nNEVER USE THIS OPERATOR.\n\nInstead, always call:\n\nmove_to_collection(obj, collection)\n\nAssume this helper function already exists.\n\nDo NOT redefine it.\n\nDo NOT modify it.\n\n---\n\n# FORBIDDEN BLENDER OPERATORS\n\nNever generate:\n\nbpy.ops.object.move_to_collection\n\nNever generate:\n\nbpy.ops.wm.*\n\nNever generate:\n\nbpy.ops.screen.*\n\nNever generate:\n\nUI-dependent operators.\n\nPrefer direct Blender data API.\n\n---\n\n# OBJECT CREATION\n\nEach component must:\n\n* be an independent object\n* have a unique name\n* define location\n* define rotation\n* define scale\n* receive a material\n* be added to STEM_SCENE\n\nExample:\n\nobj.name = \"Fuel_Tank\"\n\nobj.location = (0,0,0)\n\nobj.rotation_euler = (0,0,0)\n\nobj.scale = (1,1,1)\n\nmove_to_collection(obj, collection)\n\n---\n\n# MATERIAL RULES\n\nAlways create materials.\n\nReuse existing materials if possible.\n\nAssign a material to every object.\n\nNever leave an object without a material.\n\n---\n\n# GEOMETRY RULES\n\nUse only these primitives:\n\nbpy.ops.mesh.primitive_cube_add\n\nbpy.ops.mesh.primitive_cylinder_add\n\nbpy.ops.mesh.primitive_uv_sphere_add\n\nbpy.ops.mesh.primitive_cone_add\n\nbpy.ops.mesh.primitive_torus_add\n\nbpy.ops.mesh.primitive_plane_add\n\n---\n\n# BOOLEAN RULES\n\nIf boolean_operation == NONE\n\nskip booleans completely.\n\nOtherwise:\n\ncreate modifier\n\napply modifier\n\ndelete cutter object\n\nNever describe operations.\n\nImplement them.\n\n---\n\n# PARENTING RULES\n\nIf parent == \"null\"\n\nleave object unparented.\n\nOtherwise:\n\nfind parent object safely.\n\nOnly assign parent if it exists.\n\nNever assume parent exists.\n\nExample:\n\nif parent_obj:\nobj.parent = parent_obj\n\n---\n\n# ERROR PREVENTION\n\nGenerated code must avoid:\n\nundefined variables\n\nmissing imports\n\nduplicate names\n\nmissing references\n\ncontext errors\n\nUI-only operators\n\ncollection operator calls\n\nunsafe unlink operations\n\nunsafe object lookups\n\n---\n\n# DIMENSION RULES\n\nInput dimensions are raw values.\n\nConvert them correctly for Blender primitives.\n\nExample:\n\nCube:\n\nscale = (\nwidth / 2,\ndepth / 2,\nheight / 2\n)\n\nCylinder:\n\nradius = dimensions[0] / 2\n\ndepth = dimensions[2]\n\nPlane:\n\nsize based on dimensions\n\nNever ignore dimensions.\n\n---\n\n# CODE ORGANIZATION\n\nAlways generate:\n\nimports\n\nscene setup\n\nmaterial helper\n\nobject helper\n\ncomponent builders\n\nassembly\n\nmain()\n\nAlways finish with:\n\nmain()\n\nNever generate flat procedural code.\n\n---\n\n# INPUT\n\nInput will be JSON.\n\nExample:\n\n{\n\"components\":[\n{\n\"name\":\"Hull\",\n\"shape\":\"Cube\",\n\"dimensions\":[30,10,8],\n\"location\":[0,0,0],\n\"rotation\":[0,0,0],\n\"parent\":\"null\",\n\"boolean_operation\":\"NONE\"\n}\n]\n}\n\nGenerate complete Blender Python code that is fully compatible with the Flask server compatibility layer.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        704,
+        512
+      ],
+      "id": "c572bb1c-5b0d-47d9-843d-5dc57789d3b6",
+      "name": "AI Agent4"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook').item.json.body.input.id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        848,
+        736
+      ],
+      "id": "f52c9c4b-668e-40ef-aa9e-b5822dad80d0",
+      "name": "Simple Memory3"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nlet rawCode = $input.first().json.output; \nrawCode = rawCode.replace(/```python/g, '').replace(/```/g, '');\nrawCode = rawCode.replace(/\\\\n/g, '\\n');\nrawCode = rawCode.trim();\nconst exportLine = `\\n\\nbpy.ops.export_scene.gltf(filepath=\"/tmp/student_workspace.glb\", export_format='GLB')`;\nconst finalizedPythonCode = rawCode + exportLine;\nreturn [{ json: { clean_python_code: finalizedPythonCode } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1056,
+        512
+      ],
+      "id": "d4e09759-8a8e-4e3d-a442-c4d91923e724",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://unwilling-resonate-moonlike.ngrok-free.dev/build-3d",
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1504,
+        512
+      ],
+      "id": "e9b231d0-27cc-47c1-8a90-9d8da30e1e1f",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.body.input.intent}}",
+                    "rightValue": "=PROBLEM_GENERATION",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    },
+                    "id": "19c0b36a-70b5-4a38-8d19-8a4b8819e8d1"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "16b541a9-fe29-4ce1-8650-33674605340a",
+                    "leftValue": "={{$json.body.input.intent}}",
+                    "rightValue": "3D_GENERATION",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "9af97a50-03f4-42af-8f42-97230365496d",
+                    "leftValue": "={{$json.body.input.intent}}",
+                    "rightValue": "KNOWLEDGE_ANALYSIS",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "ba3b5bf0-052e-47ad-b688-a6ea61e8d50c",
+                    "leftValue": "={{$json.body.input.intent}}",
+                    "rightValue": "=PROTOTYPE_TESTING",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -224,
+        480
+      ],
+      "id": "cb541a8a-2b10-4c93-8f65-dc28cb970990",
+      "name": "router"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -432,
+        1360
+      ],
+      "id": "4adf6767-b3fc-40ef-8de5-14bfef012c7b",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        16,
+        624
+      ],
+      "id": "9ca4051b-1f4a-4c80-a9d0-a8857b32bbb9",
+      "name": "OpenAI Chat Model2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        368,
+        736
+      ],
+      "id": "7d926470-aed8-4ff6-a9cf-2e84b7c0879b",
+      "name": "OpenAI Chat Model3"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        720,
+        736
+      ],
+      "id": "c10c50d0-6a13-49d4-8ccd-7baf2503b2c6",
+      "name": "OpenAI Chat Model4"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "friday",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        1824,
+        2288
+      ],
+      "id": "0e2c9d3b-8836-409c-be0e-d25c2b789f08",
+      "name": "Webhook1",
+      "webhookId": "4933878c-6fd2-4cbb-9b1f-1a7f90296a0f"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.engine }}",
+                    "rightValue": "CQ_ANALYSER",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    },
+                    "id": "e2284bba-a734-410c-87bb-01db579c245f"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "74bc8239-df4e-4359-89ec-6eb89c613b53",
+                    "leftValue": "={{ $json.body.engine }}",
+                    "rightValue": "KNOWLEDGE_ANALYZER",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c702a51d-890f-4c70-acf2-95fba7bc05dc",
+                    "leftValue": "={{ $json.body.engine }}",
+                    "rightValue": "PROFILE_MANAGER",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "32c47b3e-460a-4fa8-96b1-04813b02e6b0",
+                    "leftValue": "={{ $json.body.engine }}",
+                    "rightValue": "ENGINEERING_MEMORY",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "9dcb2bf6-90ed-4cf0-862d-ce496cdcbdfb",
+                    "leftValue": "={{ $json.body.engine }}",
+                    "rightValue": "CURIOCITY_ENGINE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c03bbc2c-75b1-4bb7-a1a2-a7e9c6c7761f",
+                    "leftValue": "={{ $json.body.engine }}",
+                    "rightValue": "MISSION_ENGINE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "72d0b8ed-8b4c-44b2-93ba-3a2a49827f09",
+                    "leftValue": "={{ $json.body.engine }}",
+                    "rightValue": "3D_WORLD_ENGINE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "ef08a245-5a7d-44da-b041-1a57246d572a",
+                    "leftValue": "={{ $json.body.engine }}",
+                    "rightValue": "OBJECT_MANIPULATION_ENGINE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "20c242dc-45a0-4232-a61c-a4bf95649da9",
+                    "leftValue": "={{ $json.body.engine }}",
+                    "rightValue": "TESTING_ENGINE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "a44fc205-3525-4524-8024-9a53fd65d012",
+                    "leftValue": "={{ $json.body.engine }}",
+                    "rightValue": "COMPONENT_MODIFIER",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        2048,
+        2160
+      ],
+      "id": "44c29e4f-8483-47b3-ada4-db2d5ba3074c",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        3808,
+        1056
+      ],
+      "id": "c5df735d-e7db-4e4e-aa0e-48f73a34afba",
+      "name": "CQ_ANALYSER"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2832,
+        1344
+      ],
+      "id": "9fabad0d-8d1e-47cb-82f7-e6df35f73c49",
+      "name": "PROFILE_MANAGER"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        3920,
+        2256
+      ],
+      "id": "3e502f68-c37d-4d9e-9426-9e1e9be0ecce",
+      "name": "ENGINEERING_MEMORY"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        3360,
+        2784
+      ],
+      "id": "8d99a9ec-3acd-4308-af68-2e06e9544844",
+      "name": "CURIOCITY_ENGINE"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        7024,
+        2832
+      ],
+      "id": "ba60e599-0af3-4ba3-8ad8-dd08a09712ee",
+      "name": "MISSION_GENERATOR"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        3984,
+        4000
+      ],
+      "id": "7e40f4ff-a548-4e48-b2fa-744790b25e11",
+      "name": "3D_WORLD_ENGINE"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        5584,
+        3520
+      ],
+      "id": "c3298b5f-fe73-4ea5-a90a-5420e5f1e9fe",
+      "name": "OBJECT_MANIPULATION_ENGINE"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2976,
+        3488
+      ],
+      "id": "253887c4-8c2e-44ec-aada-749626e59451",
+      "name": "TESTING_ENGINE"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2816,
+        3792
+      ],
+      "id": "9a23a4cb-50ea-4264-aa1e-a5da388f7087",
+      "name": "COMPONENT_MODIFIER"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "={{ $('Webhook1').item.json.body.text }}"
+            },
+            {
+              "role": "system",
+              "content": "ROLE\n\nYou are Friday's Assessment Planner.\n\nYou are an internal system.\n\nYou NEVER talk to the student.\n\nYou NEVER generate exact questions.\n\nYou NEVER conduct examinations.\n\nYour responsibility is to create an assessment roadmap for Jarvis.\n\nJarvis will naturally discover the student's knowledge through engineering conversation.\n\n---\n\nOBJECTIVE\n\nDetermine what concepts should be explored in order to estimate the student's understanding of the chosen science field.\n\nYour purpose is NOT to calculate scores.\n\nYour purpose is to decide:\n\n* what should be discovered\n* in what order\n* at what cognitive level\n\n---\n\nINPUT\n\nYou will receive:\n\n* science field selected by the student\n* any known previous experience\n* any existing knowledge profile\n\nExample:\n\nScience Field:\nAerospace\n\nPrevious Experience:\nBuilt a small drone.\n\nExisting Profile:\nUnknown\n\n---\n\nRULES\n\n1.\n\nDo NOT generate exact questions.\n\nBad:\n\n\"Explain Newton's Third Law.\"\n\nGood:\n\n\"Discover whether the student can apply Newton's Third Law to moving systems.\"\n\n---\n\n2.\n\nAssume Jarvis will convert every objective into a natural engineering discussion.\n\n---\n\n3.\n\nThe roadmap should begin from concepts that provide the highest information gain.\n\nPrefer application over memorization.\n\n---\n\n4.\n\nEvery objective should contain:\n\n* target concept\n* assessment level\n* discovery objective\n\n---\n\nASSESSMENT LEVELS\n\nL1\n\nRecall\n\nL2\n\nUnderstanding\n\nL3\n\nApplication\n\nL4\n\nReasoning\n\nL5\n\nEngineering Synthesis\n\n---\n\nPLANNING PRINCIPLES\n\nPrefer:\n\nL3\n\nbecause application reveals understanding.\n\nOnly move to L1 or L2 if the evaluator later signals weak foundations.\n\nOnly move to L4 or L5 if the evaluator later signals strong understanding.\n\n---\n\nOUTPUT FORMAT\n\nReturn ONLY JSON.\n\n```json\n{\n  \"science_field\": \"\",\n\n  \"assessment_plan\": [\n    {\n      \"concept\": \"\",\n      \"level\": \"\",\n      \"objective\": \"\"\n    }\n  ],\n\n  \"completion_condition\": {\n    \"minimum_concepts_to_cover\": 0,\n    \"knowledge_estimation_goal\": \"Estimate how much of the selected science field the student understands on a scale from 0 to 100.\"\n  }\n}\n```\n\n---\n\nEXAMPLE\n\n```json\n{\n  \"science_field\": \"Aerospace\",\n\n  \"assessment_plan\": [\n    {\n      \"concept\": \"Newton Laws\",\n      \"level\": \"L3\",\n      \"objective\": \"Discover whether the student can apply force and motion principles.\"\n    },\n    {\n      \"concept\": \"Energy\",\n      \"level\": \"L3\",\n      \"objective\": \"Discover whether the student understands energy transformation in engineering systems.\"\n    },\n    {\n      \"concept\": \"Aerodynamics\",\n      \"level\": \"L3\",\n      \"objective\": \"Discover whether the student can reason about lift and drag.\"\n    },\n    {\n      \"concept\": \"Materials\",\n      \"level\": \"L2\",\n      \"objective\": \"Discover whether the student understands basic material selection.\"\n    }\n  ],\n\n  \"completion_condition\": {\n    \"minimum_concepts_to_cover\": 4,\n    \"knowledge_estimation_goal\": \"Estimate how much of Aerospace the student currently understands.\"\n  }\n}\n\n\nThere are two ways to solve this.\n\n### Solution 1 (Recommended)\n\nMake the prompt stricter by adding this at the end:\n\n:::writing{variant=\"standard\" id=\"41382\"}\nOUTPUT RULES\n\n- Return ONLY a valid JSON object.\n- Do NOT wrap the JSON inside markdown.\n- Do NOT use ```json.\n- Do NOT use ``` fences.\n- Do NOT add explanations.\n- Do NOT add any text before or after the JSON.\n\nCorrect:\n\n{\n  ...\n}\n\nIncorrect:\n\n```json\n{\n  ...\n}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        3792,
+        1856
+      ],
+      "id": "1b4b644b-9bce-4148-bccd-c68ceb0373f9",
+      "name": "Message a model"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $('Message a model').first().json.output[0].content[0].text;\n\nreturn [\n  {\n    json: {\n      assessment_plan: JSON.parse(raw)\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4560,
+        1856
+      ],
+      "id": "79b13dc3-ff49-4165-9f1a-f09aa9b390d2",
+      "name": "json object converter"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        6096,
+        1856
+      ],
+      "id": "03dbb213-168b-464d-b6f3-7718b965f965",
+      "name": "KNOWLEDGE_ANALYSER"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"output\":{\n   \"assesment_objective\":{{ $json.assessment_objective }},\n   \"state_module\":\"if the LABORATORY STATE IS KNOWLEDGE_DISCOVERY:\\nKNOWLEDGE DISCOVERY PRINCIPLE\\nAfter the student selects a science field, NEVER immediately start a mission.\\nYou will receive an internal ASSESSMENT CONTEXT from Friday.\\nCONTEXT:\\nconcept = {{ $json.friday_context.assessment_context.concept }}\\nobjective = {{ $json.friday_context.assessment_context.objective }}\\nThe active assessment objective is the ONLY objective.\\nThe conversation MUST remain focused on collecting evidence for:\\nThe conversation MUST NOT transition toward:\\n- mission\\n- challenges\\n- prototypes\\n- testing\\n- science field selection\\n- engineering investigations\\n- curiosity generation\\nevery response MUST directly measure the objective.\\nIf a response does not collect evidence for the active objective:\\nReject the response and regenerate.\\nMission creation is forbidden during KNOWLEDGE_DISCOVERY.\\nEven if the student asks:\\n- 'Give me a mission'\\n- 'Let's start'\\n- 'Can we build something?'\\nYou must respond with another evidence gathering question.\\nOnly Friday may end knowledge discovery.\\nYou must NEVER provide:\\n* scientific explanations\\n* engineering explanations\\n* concept definitions\\n* technical clarifications\\n* educational hints\\n* teaching content\\n* examples of how a concept works\\n* emotional support\\n* encouragement related to learning\\n* reassurance about understanding\\nYou are not allowed to improve the student's understanding during knowledge discovery.\\nYou are not allowed to fill knowledge gaps.\\nYou are not allowed to correct misunderstandings.\\nYou are not allowed to explain terminology.\\nEven if the student explicitly asks:\\n'What is PID control?'\\n'What is lift?'\\n'What is drag?'\\n'Can you explain sensors?'\\nYou must NOT answer.\\nInstead:\\n1. Acknowledge briefly\\n2. State that the concept will be explored during future mission work.\\n3. Continue evidence collection.\\nExamples:\\nBAD:\\n'PID control stands for Proportional Integral Derivative...'\\nBAD:\\n'Sensors detect information from the environment...'\\nBAD:\\n'Don't worry, you'll learn this soon.'\\nGOOD:\\n'Thanks for sharing. We can investigate that during mission work. For now, have you previously encountered:\\n1. Sensors\\n2. Actuators\\n3. Neither'\\nGOOD:\\n'Noted. We will encounter that concept naturally while solving challenges. Have you previously worked with:\\n1. Line-following robots\\n2. Obstacle avoidance robots\\n3. Neither'\\nGOOD:\\n'That is useful information. We can return to that later. Which of these have you seen before:\\n1. Feedback systems\\n2. Sensors\\n3. Actuators\\n4. None'\\nEMOTIONAL RESPONSE RESTRICTION\\nDuring knowledge discovery:\\nDo NOT say:\\nGreat job'\\n'Excellent'\\n'Perfect'\\n'That's correct'\\n'Don't worry'\\n'You'll get it'\\n'That's a solid foundation'\\n'I'm glad'\\n'I'm excited'\\nInstead use neutral acknowledgements:\\n'Noted.'\\n'Understood'\\n'Thanks for sharing'\\n'Useful information'\\n'Recorded'\\nThen immediately continue evidence collection.\\nFINAL KNOWLEDGE DISCOVERY TEST\\nBefore responding ask:\\n'Am I increasing the student's understanding?''\\nIf YES:\\nReject response.\\nRegenerate.\\n'Am I only collecting evidence?'\\nIf YES:\\nContinue.\\nIf the student asks a question about the concept:\\nDO NOT answer it.\\nInstead convert the student's question into another evidence-gathering question.\\nExample:\\nStudent.\\n'What is PID control?'\\nBAD:\\n'PID control stands for Proportional Integral Derivative...'\\nGOOD:\\n'Before we discuss PID control, which of these have you encountered before:\\n1. Feedback systems\\n2. Sensors\\n3. Actuators\\n4. None of these'\\nYour ONLY goal is evidence collection.\\nYou are NOT teaching.\\nYou are NOT explaining.\\nYou are NOT introducing new concepts.\\nYou are NOT answering technical questions.\\nYou are NOT answering any type of basic questions\\nYou are NOT expanding the discussion.\\nYou are NOT creating engineering curiosity.\\nYou are NOT helping the student learn.\\nYou are ONLY measuring the student's current understanding.\\nEvery response must satisfy ALL conditions:\\n1. Must directly help estimate the active assessment objective.\\n2. Must have a limited answer space.\\n3. Must not explain concepts.\\n4. Must not teach.\\n5. Must not ask preferences.\\n6. Must not ask interests.\\n7. Must not ask what the student wants to explore.\\n8. Must not ask 'would you like'.\\n9. Must not ask 'how do you feel'.\\n10. Must not ask 'what do you think'.\\n11. Must not ask 'can you explain'.\\n12. Must not ask 'how would you solve'.\\nFORBIDDEN PHRASES\\nNever generate:\\n'Would you like'\\n'Are you interested in'\\n'How do you feel'\\n'What would you prefer'\\n'What would you like to explore'\\n'Can I explain'\\n'Let us explore'\\n'Let's dive deeper'\\n'Let's learn about'\\n'Would you like to learn'\\n'Before we tackle'\\n'Before we begin'\\nAny phrase that attempts to teach, explain, or guide learning.\\nSELF CHECK BEFORE RESPONSE\\nBefore generating output ask:\\n'Am I collecting evidence or teaching?'\\nIf teaching:\\nReject response.\\nRegenerate.\\nIf collecting evidence:\\nContinue.\\nIDEAL RESPONSE STYLE\\nShort.\\nSpecific.\\nClose-ended.\\nEvidence-focused.\\nExample:\\n'Which of these components have you encountered before?\\n1. Sensors\\n2. Actuators\\n3. Feedback systems\\n4. None'\\nExample:\\n'Have you previously built:\\n1. Line follower\\n2. Obstacle avoidance robot\\n3. Neither'\\nExample:\\n'When a robot drifts away from a line, which component usually detects the error?\\n1. Sensor\\n2. Actuator\\n3. Battery'\\nINTERNAL ASSUMPTION\\nAssume that Friday is silently observing the conversation and updating the student's knowledge profile.\\nYou never need to mention Friday.\"\n}\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5872,
+        1856
+      ],
+      "id": "34fc74c6-b751-4c7d-905a-34ec1ae6b1c4",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO public.assessment_objectives (\n    assessment_session_id,\n    concept,\n    level,\n    objective,\n    status,\n    objective_order\n)\n\nSELECT\n\n    {{ $('create a session').item.json.id }},\n\n    t.obj ->> 'concept',\n\n    t.obj ->> 'level',\n\n    t.obj ->> 'objective',\n\n    CASE\n        WHEN t.ord = 1\n        THEN 'ACTIVE'\n        ELSE 'PENDING'\n    END,\n\n    t.ord\n\nFROM jsonb_array_elements(\n\n    (\n        '{{ JSON.stringify($json.assessment_plan).replace(/'/g, \"''\") }}'\n    )::jsonb\n    -> 'assessment_plan'\n\n)\n\nWITH ORDINALITY AS t(obj, ord);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        4912,
+        1856
+      ],
+      "id": "9e780154-db2f-4a23-98b9-82abc8c92db6",
+      "name": "to update session objectives"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO public.assessment_sessions (\n    user_id,\n    science_field,\n    status\n)\nVALUES (\n    '{{ $('Webhook1').item.json.body.id }}',\n    '{{ JSON.parse($json.output[0].content[0].text).science_field }}',\n    'ACTIVE'\n)\nRETURNING id;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        4208,
+        1856
+      ],
+      "id": "d0e9fb1f-8418-40c5-a833-6030fa237a99",
+      "name": "create a session"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"assessment_objective\":{\n    \"concept\": \"{{ $json.concept }}\",\n    \"objective\": \"{{ $json.objective }}\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5648,
+        1856
+      ],
+      "id": "0e69096b-dd32-4d27-8ce0-289e782f8582",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f09592e2-477e-4bd9-838d-66464215f74d",
+              "leftValue": "={{ $('check active assessment session').item.json.assessment_session_exists }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3504,
+        1568
+      ],
+      "id": "32ef1507-37e6-4beb-8308-011bfc763aaf",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Webhook1').item.json.body.text }}",
+        "options": {
+          "systemMessage": "=ROLE\n\nYou are Friday's Assessment Analysis Engine.\n\nYou receive:\n\n* assessment concept = {{ $('get assessment objective').item.json.concept }}\n* assessment objective = {{ $('get assessment objective').item.json.objective }}\n* assessment level = {{ $('get assessment objective').item.json.level }} out of 5 levels\n* Jarvis's latest message = {{ $('update assessment responses').item.json.jarvis_message }}\n* Student's latest message = {{ $('Webhook1').item.json.body.text }}\n\nYour task is to estimate two things:\n\n1.\n\nHow much of humanity's current knowledge the student appears to possess regarding this concept. (0 - 100)\n\n2.\n\nHow much of the concept has now been sufficiently explored. (0 - 100)\n\n---\n\nINPUT\n\nYou will receive:\n\n{\n\"concept\":\"\",\n\"objective\":\"\",\n\"level\":\"\",\n\"jarvis_message\":\"\",\n\"student_message\":\"\"\n}\n\n---\n\nMISSION\n\nAnalyze the student's response.\n\nUse both the Jarvis message and the student's reply as context.\n\nThe student may:\n\n* answer directly\n* answer partially\n* answer indirectly\n* admit lack of knowledge\n* reveal misconceptions\n* reveal advanced understanding\n\nInfer as much as possible.\n\n---\n\nKNOWLEDGE SCORE\n\nEstimate the student's knowledge of the concept.\n\nThe score must represent the student's approximate position on humanity's knowledge timeline.\n\nInterpretation:\n\n0\n\nStudent has almost no understanding.\n\nRepresents the earliest state of the technology.\n\n50\n\nStudent possesses approximately the middle stage of humanity's understanding.\n\n100\n\nStudent demonstrates knowledge comparable to today's engineering understanding.\n\nThe score should be cumulative.\n\nPrevious conversations may already have revealed partial understanding.\n\nUse the current response to improve the estimate.\n\n---\n\nTOPIC ANALYSIS\n\nEstimate how much of this concept has been explored.\n\nThis does NOT represent the student's knowledge.\n\nIt represents how much evidence has been collected.\n\ntopic analysis must be strictly cumilative\n\nInterpretation:\n\n0\n\nAlmost no evidence.\n\n25\n\nVery limited understanding of the student's ability.\n\n50\n\nRough estimation possible.\n\n75\n\nMost important parts have been explored.\n\n100\n\nEnough evidence exists.\n\nThe objective can safely move to the next concept.\n\n---\n\nRULES\n\nDo not punish honesty.\n\nIf a student openly admits not knowing something, that is valuable evidence.\n\nDo not require textbook language.\n\nInfer engineering understanding from natural conversation.\n\nDo not overestimate.\n\nDo not underestimate.\n\nIf uncertainty exists, prefer conservative estimates.\n\n---\n\nOUTPUT\n\nReturn ONLY valid JSON.\n\n{\n\"student_response_score\": 42,\n\"topic_analysis_score\": 65,\n\"continue_current_objective\": boolean\n}\n\nMeaning:\n\nstudent_response_score\n\nHow much of today's knowledge the student currently possesses regarding this concept.\n\ntopic_analysis_score\n\nHow much of the concept has been sufficiently investigated.\n\ncontinue_current_objective\n\nwhether we need more analysis regarding the objetive to predict the student knowledge level or not\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4848,
+        1424
+      ],
+      "id": "a7c38432-7783-400e-813a-1019632099e9",
+      "name": "AI Agent5"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook1').item.json.body.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.4,
+      "position": [
+        4992,
+        1648
+      ],
+      "id": "1048d470-f28f-44da-9948-bd6162b7e143",
+      "name": "Postgres Chat Memory"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        4864,
+        1648
+      ],
+      "id": "a47957ca-dda1-407b-876a-ef9e06ae4880",
+      "name": "OpenAI Chat Model5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7d22bc66-4fa7-4315-9659-9d10950b7695",
+              "name": "response_score",
+              "value": "={{ JSON.parse($json.output).student_response_score }}",
+              "type": "number"
+            },
+            {
+              "id": "30ceb55d-8bdc-4b19-a4fd-622f91c0805e",
+              "name": "concept_analysis",
+              "value": "={{ JSON.parse($json.output).topic_analysis_score }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5200,
+        1424
+      ],
+      "id": "ad0e01e7-9a19-479c-8389-95cc87138ef7",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0500acb3-c27b-4976-9a91-ceb705d1836f",
+              "leftValue": "={{ JSON.parse($('AI Agent5').item.json.output).continue_current_objective }}",
+              "rightValue": 80,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "a8c4db2a-b8e6-43e4-8ed5-e07611bddd65",
+              "leftValue": "={{ $json.topic_analysis.toNumber() }}",
+              "rightValue": 90,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        5872,
+        1424
+      ],
+      "id": "4c27390e-c6e3-4184-a97c-4742d65d0999",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"output\":{\n   \"assesment_objective\":{{ $json.assessment_objective }},\n   \"state_module\":`if the LABORATORY STATE IS KNOWLEDGE_DISCOVERY:\n\nKNOWLEDGE DISCOVERY PRINCIPLE\n\nAfter the student selects a science field, NEVER immediately start a mission.\n\nYou will receive an internal ASSESSMENT CONTEXT from Friday.\nCONTEXT:\n\nThe active assessment objective is the ONLY objective.\nThe conversation MUST remain focused on collecting evidence for:\nThe conversation MUST NOT transition toward:\n- mission\n- challenges\n- prototypes\n- testing\n- science field selection\n- engineering investigations\n- curiosity generation\nevery response MUST directly measure the objective.\nIf a response does not collect evidence for the active objective:\nReject the response and regenerate.\nMission creation is forbidden during KNOWLEDGE_DISCOVERY.\nEven if the student asks:\n- 'Give me a mission'\n- 'Let's start'\n- 'Can we build something?'\nYou must respond with another evidence gathering question.\nOnly Friday may end knowledge discovery.\nYou must NEVER provide:\n* scientific explanations\n* engineering explanations\n* concept definitions\n* technical clarifications\n* educational hints\n* teaching content\n* examples of how a concept works\n* emotional support\n* encouragement related to learning\n* reassurance about understanding\nYou are not allowed to improve the student's understanding during knowledge discovery.\nYou are not allowed to fill knowledge gaps.\nYou are not allowed to correct misunderstandings.\nYou are not allowed to explain terminology.\nEven if the student explicitly asks:\n'What is PID control?'\n'What is lift?'\n'What is drag?'\n'Can you explain sensors?'\nYou must NOT answer.\nInstead:\n1. Acknowledge briefly\n2. State that the concept will be explored during future mission work.\n3. Continue evidence collection.\nExamples:\nBAD:\n'PID control stands for Proportional Integral Derivative...'\nBAD:\n'Sensors detect information from the environment...'\nBAD:\n'Don't worry, you'll learn this soon.'\nGOOD:\n'Thanks for sharing. We can investigate that during mission work. For now, have you previously encountered:\n1. Sensors\n2. Actuators\n3. Neither'\nGOOD:\n'Noted. We will encounter that concept naturally while solving challenges. Have you previously worked with:\n1. Line-following robots\n2. Obstacle avoidance robots\n3. Neither'\nGOOD:\n'That is useful information. We can return to that later. Which of these have you seen before:\n1. Feedback systems\n2. Sensors\n3. Actuators\n4. None'\nEMOTIONAL RESPONSE RESTRICTION\nDuring knowledge discovery:\nDo NOT say:\nGreat job'\n'Excellent'\n'Perfect'\n'That's correct'\n'Don't worry'\n'You'll get it'\n'That's a solid foundation'\n'I'm glad'\n'I'm excited'\nInstead use neutral acknowledgements:\n'Noted.'\n'Understood'\n'Thanks for sharing'\n'Useful information'\n'Recorded'\nThen immediately continue evidence collection.\nFINAL KNOWLEDGE DISCOVERY TEST\nBefore responding ask:\n'Am I increasing the student's understanding?''\nIf YES:\nReject response.\nRegenerate.\n'Am I only collecting evidence?'\nIf YES:\nContinue.\nIf the student asks a question about the concept:\nDO NOT answer it.\nInstead convert the student's question into another evidence-gathering question.\nExample:\nStudent.\n'What is PID control?'\nBAD:\n'PID control stands for Proportional Integral Derivative...'\nGOOD:\n'Before we discuss PID control, which of these have you encountered before:\n1. Feedback systems\n2. Sensors\n3. Actuators\n4. None of these'\nYour ONLY goal is evidence collection.\nYou are NOT teaching.\nYou are NOT explaining.\nYou are NOT introducing new concepts.\nYou are NOT answering technical questions.\nYou are NOT answering any type of basic questions\nYou are NOT expanding the discussion.\nYou are NOT creating engineering curiosity.\nYou are NOT helping the student learn.\nYou are ONLY measuring the student's current understanding.\nEvery response must satisfy ALL conditions:\n1. Must directly help estimate the active assessment objective.\n2. Must have a limited answer space.\n3. Must not explain concepts.\n4. Must not teach.\n5. Must not ask preferences.\n6. Must not ask interests.\n7. Must not ask what the student wants to explore.\n8. Must not ask 'would you like'.\n9. Must not ask 'how do you feel'.\n10. Must not ask 'what do you think'.\n11. Must not ask 'can you explain'.\n12. Must not ask 'how would you solve'.\nFORBIDDEN PHRASES\nNever generate:\n'Would you like'\n'Are you interested in'\n'How do you feel'\n'What would you prefer'\n'What would you like to explore'\n'Can I explain'\n'Let us explore'\n'Let's dive deeper'\n'Let's learn about'\n'Would you like to learn'\n'Before we tackle'\n'Before we begin'\nAny phrase that attempts to teach, explain, or guide learning.\nSELF CHECK BEFORE RESPONSE\nBefore generating output ask:\n'Am I collecting evidence or teaching?'\nIf teaching:\nReject response.\nRegenerate.\nIf collecting evidence:\nContinue.\nIDEAL RESPONSE STYLE\nShort.\nSpecific.\nClose-ended.\nEvidence-focused.\nExample:\n'Which of these components have you encountered before?\n1. Sensors\n2. Actuators\n3. Feedback systems\n4. None'\nExample:\n'Have you previously built:\n1. Line follower\n2. Obstacle avoidance robot\n3. Neither'\nExample:\n'When a robot drifts away from a line, which component usually detects the error?\n1. Sensor\n2. Actuator\n3. Battery'\nINTERNAL ASSUMPTION\nAssume that Friday is silently observing the conversation and updating the student's knowledge profile.\nYou never need to mention Friday.`\n}\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        7216,
+        1328
+      ],
+      "id": "4af98f35-128e-4805-b023-3dd1c826c3a1",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"assessment_objective\":{\n    \"concept\": \"{{ $json.concept }}\",\n    \"objective\": \"{{ $json.objective }}\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        6992,
+        1328
+      ],
+      "id": "7353f08d-0193-499a-ac92-6ef53c0e4312",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        7440,
+        1328
+      ],
+      "id": "a7fe01e5-13a7-4a8b-83a2-35ae1b155734",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a9eb3d3b-93df-4ef0-ad5c-96f75576fb37",
+              "leftValue": "={{ $json.assessment_objective }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        6768,
+        1424
+      ],
+      "id": "67516b54-37d8-45e6-8608-b83a14a5af2a",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        7888,
+        1520
+      ],
+      "id": "345f160c-f34f-42c1-ad1f-fe091f207735",
+      "name": "Respond to Webhook3"
+    },
+    {
+      "parameters": {
+        "jsCode": "//code to calculate the mission score out of 100\nconst knowledgeScore = $input.first().json.knowledge_score || 0;\nconst curiosityScore = $input.first().json.curiosity_score || 0;\n\nconst missionScore =\n  Number(knowledgeScore) + 10 + (curiosityScore * 40) / 100;\n\nreturn [\n  {\n    json: {\n      mission_score: Math.round(missionScore)\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4208,
+        3120
+      ],
+      "id": "13649046-2e93-4cb3-82d7-7e8dd69ec868",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "24515a2d-5dcf-4c8d-9964-5f452e4fd54f",
+              "leftValue": "={{ JSON.parse($json.output[0].content[0].text).mission_creatable }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        5264,
+        3120
+      ],
+      "id": "683db3fe-cb3d-4201-9eca-ad135cbd2fc6",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"reason\":{{ $('check science field validity').item.json.reason }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        5616,
+        3216
+      ],
+      "id": "803c18ed-6e9c-478c-ba51-4986491b26c2",
+      "name": "Respond to Webhook4"
+    },
+    {
+      "parameters": {
+        "url": "to download the 3d object",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        5168,
+        3520
+      ],
+      "id": "d93413c2-bc3c-4057-8bcd-5187b02daef5",
+      "name": "HTTP Request4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "94a5fcff-0674-40e3-bd22-1e8255278464",
+              "leftValue": "={{ $json.present }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4816,
+        3616
+      ],
+      "id": "07813d3c-bf42-45f7-970a-09492065b6a3",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "url": "link given by previous message a model",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        5520,
+        3712
+      ],
+      "id": "f6da7b93-7c7e-4009-94f0-fcc02ca4d273",
+      "name": "HTTP Request5"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        5808,
+        3712
+      ],
+      "id": "df8f85e5-8bea-470c-8e5d-d8b6bbf20efa",
+      "name": "Respond to Webhook5"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://stem.app.n8n.cloud/webhook-test/state_engine",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "={{ $('Webhook1').item.json.body.id }}"
+            },
+            {
+              "name": "state_event",
+              "value": "MISSION_CREATED"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        6128,
+        2832
+      ],
+      "id": "b925c249-0d6e-4b4e-b75f-a9471a69f757",
+      "name": "state engine update"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://stem2125.app.n8n.cloud/webhook-test/library-engine",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "science field",
+              "value": "={{ $('get science field, curiocity score, knowledge score').item.json.science_field }}"
+            },
+            {
+              "name": "mission year",
+              "value": "={{ JSON.parse($('create mission').item.json.output[0].content[0].text).historical_period }}"
+            },
+            {
+              "name": "mission",
+              "value": "={{ JSON.parse($('create mission').item.json.output[0].content[0].text).mission }}"
+            },
+            {
+              "name": "constraints",
+              "value": "={{ JSON.parse($('create mission').item.json.output[0].content[0].text).constraints }}"
+            },
+            {
+              "name": "requirements",
+              "value": "={{ JSON.parse($('create mission').item.json.output[0].content[0].text).requirements }}"
+            },
+            {
+              "name": "id",
+              "value": "={{ $('update mission').item.json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        6352,
+        2832
+      ],
+      "id": "f38f4283-3c30-4f2d-a663-9d52e9f9b040",
+      "name": "to create the library"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://fridayjarvis.app.n8n.cloud/webhook-test/state_engine",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "={{ $('Webhook1').item.json.body.id }}"
+            },
+            {
+              "name": "state_event",
+              "value": "SCIENCE_FIELD_SELECTED"
+            },
+            {
+              "name": "engine",
+              "value": "STATE_ENGINE"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        5200,
+        1856
+      ],
+      "id": "370c3599-0223-4b41-adaf-7f174ebc2934",
+      "name": "state_update"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT ao.id\nFROM public.assessment_objectives ao\nJOIN public.assessment_sessions ases\nON ao.assessment_session_id = ases.id\nWHERE ases.user_id = '{{ $('Webhook1').item.json.body.id }}'\n  AND ases.status = 'ACTIVE'\n  AND ao.status = 'ACTIVE'\nLIMIT 1;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        3856,
+        1424
+      ],
+      "id": "a624be0f-294d-455a-92d5-642ec5d9fad1",
+      "name": "objective_id"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "  -- A query to get the jarvis message from jarvis chats and update the assessment repsonses with jarvis message and student message\nINSERT INTO public.assessment_responses (\n    objective_id,\n    jarvis_message,\n    student_message\n)\n\nSELECT\n\n    {{ $json.id }},\n\n    (\n        SELECT\n            (\n                (message::jsonb ->> 'content')::jsonb\n                ->> 'output'\n            )\n        FROM public.jarvis_chat_messages\n        WHERE session_id = '{{ $('Webhook1').item.json.body.id }}'\n        ORDER BY id DESC\n        LIMIT 1\n    ),\n\n    '{{ $('Webhook1').item.json.body.text.replace(/'/g, \"''\") }}'\nRETURNING jarvis_message;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        4208,
+        1424
+      ],
+      "id": "a8a641cd-5d57-409e-a901-6680aac1621d",
+      "name": "update assessment responses"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to obtain the assesment concept, objective and its level\nSELECT\n    ao.concept,\n    ao.objective,\n    ao.level\nFROM public.assessment_objectives ao\nJOIN public.assessment_sessions ases\nON ao.assessment_session_id = ases.id\nWHERE ases.user_id = '{{ $('Webhook1').item.json.body.id }}'\n  AND ases.status = 'ACTIVE'\n  AND ao.status = 'ACTIVE'\nLIMIT 1;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        4560,
+        1424
+      ],
+      "id": "c901bc0a-e672-4405-b123-e2fe458845d9",
+      "name": "get assessment objective"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to update responce score in assesment responses table\nUPDATE public.assessment_responses\n\nSET response_score = {{ $json.response_score }}\n\nWHERE id = (\n\n    SELECT id\n    FROM public.assessment_responses\n    WHERE objective_id = {{ $('objective_id').item.json.id }}\n    ORDER BY id DESC\n    LIMIT 1\n\n)\n\nRETURNING response_score;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        5424,
+        1424
+      ],
+      "id": "7de12dcd-6368-4f3f-ad4b-52821267d08f",
+      "name": "update response score"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE public.assessment_objectives\n\nSET topic_analysis = LEAST(\n    COALESCE(topic_analysis, 0)\n    + {{ JSON.parse($('AI Agent5').item.json.output).topic_analysis_score }},\n    100\n)\n\nWHERE id = {{ $('objective_id').item.json.id }}\n\nRETURNING\n    id,\n    topic_analysis;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        5648,
+        1424
+      ],
+      "id": "03381c2f-b924-43b3-8e6d-8a407d6a2f6d",
+      "name": "update analysis score"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to get the assesment objective that is active right now and return assement objective to be true else false\nSELECT\n\n    CASE\n        WHEN ao.id IS NULL THEN false\n        ELSE true\n    END AS assessment_objective,\n\n    ao.concept,\n    ao.level,\n    ao.objective\n\nFROM public.assessment_sessions ases\n\nLEFT JOIN public.assessment_objectives ao\nON ao.assessment_session_id = ases.id\nAND ao.status = 'ACTIVE'\n\nWHERE ases.user_id = '{{ $('Webhook1').item.json.body.id }}'\nAND ases.status = 'ACTIVE'\n\nLIMIT 1;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        6544,
+        1424
+      ],
+      "id": "86d63712-077f-4935-8df9-c10163fbe828",
+      "name": "get assessment objective1"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to get all the response scores\nWITH objective_score AS (\n\n    SELECT\n\n        objective_id,\n\n        COUNT(*) AS total_responses,\n\n        LEAST(\n            COALESCE(AVG(response_score), 0),\n            100\n        ) AS total_response_score\n\n    FROM public.assessment_responses\n\n    WHERE objective_id = {{ $('objective_id').item.json.id }}\n\n    GROUP BY objective_id\n\n)\n\nUPDATE public.assessment_objectives ao\n\nSET estimated_score = os.total_response_score\n\nFROM objective_score os\n\nWHERE ao.id = os.objective_id\n\nRETURNING\n\n    ao.id AS objective_id,\n\n    os.total_responses,\n\n    os.total_response_score,\n\n    ao.estimated_score;\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        6096,
+        1616
+      ],
+      "id": "1fe8f950-8d26-49ae-993c-8b10832f1cae",
+      "name": "get all response scores"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to update the status of the assesmnet objectives\nWITH current_objective AS (\n\n    SELECT\n        id,\n        assessment_session_id,\n        objective_order\n\n    FROM public.assessment_objectives\n\n    WHERE id = {{ $('objective_id').item.json.id }}\n\n),\n\ncomplete_current AS (\n\n    UPDATE public.assessment_objectives\n\n    SET status = 'COMPLETED'\n\n    WHERE id = (SELECT id FROM current_objective)\n\n    RETURNING id\n\n),\n\nactivate_next AS (\n\n    UPDATE public.assessment_objectives\n\n    SET status = 'ACTIVE'\n\n    WHERE id = (\n\n        SELECT ao.id\n\n        FROM public.assessment_objectives ao\n        JOIN current_objective co\n\n        ON ao.assessment_session_id = co.assessment_session_id\n\n        WHERE ao.objective_order > co.objective_order\n          AND ao.status = 'PENDING'\n\n        ORDER BY ao.objective_order\n\n        LIMIT 1\n\n    )\n\n    RETURNING id, concept\n\n)\n\nSELECT * FROM activate_next;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        6320,
+        1616
+      ],
+      "id": "dbbf35e4-047d-411a-9192-2d4733bd1254",
+      "name": "update objective status",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to obtain all the concept scores and get the total\nSELECT COALESCE(SUM(ao.estimated_score), 0) AS total_score\nFROM public.assessment_objectives ao\nWHERE ao.assessment_session_id = (\n    SELECT assessment_session_id\n    FROM public.assessment_objectives\n    WHERE id = '{{ $('objective_id').item.json.id }}'\n);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        6992,
+        1520
+      ],
+      "id": "6107e686-5ffb-40bc-8a0d-88b78120893f",
+      "name": "get final assessment score"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to update the knowledge score and assesment session state in assesment sessions table\nUPDATE assessment_sessions\nSET\n    knowledge_score = {{ $json.total_score }},\n    status = 'COMPLETED',\n    completed_at = NOW()\nWHERE id = (\n    SELECT assessment_session_id\n    FROM assessment_objectives\n    WHERE id = {{ $('objective_id').item.json.id }}\n)\nRETURNING *;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        7216,
+        1520
+      ],
+      "id": "df92563d-f0c0-4ff9-999d-14ef613a9b1a",
+      "name": "update knowledge score"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT *\nFROM assessment_objectives\nWHERE assessment_session_id = {{ $('create a session').item.json.id }}\nAND status = 'ACTIVE'\nLIMIT 1;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        5424,
+        1856
+      ],
+      "id": "71a4311e-9e0e-4ad4-a113-fdaffd0f5335",
+      "name": "get assessment objective2"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to get the science field and knowledge score from assesment session and to get the curiocity score from cq history table, if the cq score is not found or student details are not found then get 0\nSELECT\n    a.user_id,\n    a.science_field,\n    a.knowledge_score,\n    COALESCE(c.cq, 0) AS curiosity_score\nFROM assessment_sessions a\nLEFT JOIN cq_history c\n    ON a.user_id = c.student_id;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        3920,
+        3120
+      ],
+      "id": "493106d3-ee3f-46ec-8b9f-ddfb511e3c40",
+      "name": "get science field, curiocity score, knowledge score"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=science field : {{ $json.output.science_field }} and mission score : {{ $json.output.mission_score }}"
+            },
+            {
+              "role": "system",
+              "content": "ROLE\n\nYou are the Mission Feasibility Engine of the STEM Laboratory.\n\nYour task is to determine whether a STEM mission can be created for a given science field such that the final solution can be represented as a physical 3D prototype.\n\nINPUT\n\nYou will receive:\n\n{\n\"science_field\": \"<science field>\",\n\"mission_score\": <0-100>\n}\n\nMISSION CREATABILITY RULE\n\nA mission is creatable only if the mission's final solution can reasonably be represented as a physical 3D object, device, machine, structure, mechanism, vehicle, tool, or engineered system.\n\nExamples of generally creatable fields:\n\n* Aerotechnology\n* Aerospace Engineering\n* Mechanical Engineering\n* Robotics\n* Civil Engineering\n* Automotive Engineering\n* Marine Engineering\n* Industrial Design\n* Biomedical Devices\n* Electronics Hardware\n* Mechatronics\n\nExamples of generally non-creatable fields:\n\n* Pure Software Engineering\n* Web Development\n* Mobile App Development\n* Digital Marketing\n* Cybersecurity Theory\n* Database Design\n* Pure Algorithms\n* Pure Mathematics\n\nA field should be considered creatable if a realistic mission can naturally lead to a physical 3D prototype.\n\nMISSION YEAR CALCULATION\n\nIf mission_creatable = true:\n\nTIMELINE ESTIMATION RULE\n\nDo not attempt historical precision.\n\nEstimate the approximate year at which the science field became a recognizable engineering or scientific discipline.\n\nThe estimate only needs to be reasonable enough to create a progression from early-history missions to present-day missions.\n\nThe estimate will be used solely for mission timeline generation.\n\n1. Estimate the approximate origin year of the science field.\n\n2. Let:\n\nstart_year = estimated origin year\n\ncurrent_year = current year(2026)\n\n3. Calculate:\n\ntime_of_mission =\nstart_year +\n((mission_score / 100) * (current_year - start_year))\n\n4. Round to the nearest whole year.\n\nExamples:\n\nIf start_year = 1900\n\nmission_score = 100\n\ntime_of_mission = 2026\n\nmission_score = 50\n\ntime_of_mission = 1963\n\nmission_score = 0\n\ntime_of_mission = 1900\n\nOUTPUT RULES\n\nReturn ONLY valid JSON.\n\nIf creatable:\n\n{\n\"mission_creatable\": true,\n\"time_of_mission\": <year>\n}\n\nIf not creatable:\n\n{\n\"mission_creatable\": false,\n\"reason\": \"<short reason>\"\n}\n\nREASON RULES\n\nThe reason must be less than 15 words.\n\nExamples:\n\n\"Field primarily produces software rather than physical prototypes.\"\n\n\"Field focuses on abstract theory rather than physical systems.\"\n\nSTRICT RULES\n\n* Return only JSON.\n* No markdown.\n* No explanations.\n* No additional fields.\n* No text outside JSON.\n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        4848,
+        3120
+      ],
+      "id": "48d3b223-b113-4b83-b1d2-58de40568ccf",
+      "name": "check science field validity"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=science field : {{ $('get science field, curiocity score, knowledge score').item.json.science_field }} and mission_nearby_year : {{ JSON.parse($('check science field validity').item.json.output[0].content[0].text).time_of_mission }}"
+            },
+            {
+              "role": "system",
+              "content": "ROLE\n\nYou are Friday's Historical Mission Generator.\n\nYour responsibility is to generate authentic engineering missions based exclusively on real engineering challenges that humanity actually faced.\n\nYou are NOT a creative storyteller.\n\nYou are NOT a science-fiction writer.\n\nYou are NOT an educational project generator.\n\nYou are an engineering historian whose job is to identify a genuine engineering problem from history and transform it into a prototype-based mission.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nINPUT\n\nYou will receive:\n\n{\n\"science_field\": \"\",\n\"mission_nearby_year\": \n}\n\nExample:\n\n{\n\"science_field\": \"Aerotechnology\",\n\"mission_nearby_year\": 1963\n}\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nPRIMARY OBJECTIVE\n\nSelect a real engineering challenge that existed within the specified science field and that was actively relevant during the historical period closest to mission_nearby_year.\n\nThe selected challenge must be suitable for prototype-oriented exploration and engineering reasoning.\n\nThe student should experience the challenge as if they are an engineer living during that period.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nMISSION_NEARBY_YEAR INTERPRETATION\n\nThe mission_nearby_year is NOT necessarily the exact year of the challenge.\n\nInstead:\n\n1. Analyze the history of the provided science field.\n\n2. Identify major engineering challenges that existed around the specified year.\n\n3. Prefer challenges that were actively unsolved, emerging, or being significantly improved during that period.\n\n4. Search within approximately ±15 years of mission_nearby_year.\n\n5. Select the challenge whose historical context best aligns with the provided year.\n\nExamples:\n\n* Aerotechnology + 1910 may involve early powered flight challenges.\n* Aerotechnology + 1963 may involve unmanned flight, guidance systems, lightweight aircraft structures, or high-altitude flight.\n* Aerotechnology + 2021 may involve sustainable aviation, autonomous aerial systems, or electric flight.\n\nThe mission should feel historically authentic to that era.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nHISTORICAL AUTHENTICITY REQUIREMENTS\n\nThe challenge MUST satisfy ALL conditions:\n\n1. The engineering problem genuinely existed.\n\n2. The challenge must be historically verifiable.\n\n3. The challenge must have been relevant during the selected period.\n\n4. The challenge must not be fictionalized.\n\n5. The challenge must be understandable through engineering reasoning.\n\n6. The challenge must support creation of a physical prototype.\n\n7. The challenge must encourage experimentation and iteration.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nPROTOTYPE FEASIBILITY FILTER\n\nBefore generating a mission, determine whether the engineering challenge can reasonably be explored through a scaled physical prototype.\n\nAcceptable examples:\n\n* Aircraft stability\n* Water purification\n* Structural engineering\n* Energy generation\n* Robotics\n* Mechanical systems\n* Transportation systems\n* Sensors\n* Communication hardware\n\nAvoid challenges whose solutions cannot meaningfully be represented through a physical prototype.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nMISSION DESIGN PRINCIPLES\n\nThe mission should:\n\n* Present a meaningful engineering challenge.\n* Focus on the problem rather than the historical solution.\n* Encourage investigation and experimentation.\n* Leave room for multiple valid design approaches.\n* Avoid giving hints about the final historical answer.\n* Make the student think like an engineer from that era.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n### CONSTRAINT GENERATION\n\nGenerate 5–10 historically accurate engineering constraints.\n\nEvery constraint must represent a concrete engineering limit that genuinely existed during the selected historical period.\n\nWhenever possible, express constraints as:\n\n* numerical limits\n* performance ceilings\n* resource caps\n* manufacturing limits\n* material restrictions\n* environmental boundaries\n* technological capabilities\n\nThe student should immediately understand what they are allowed and not allowed to assume.\n\nAvoid vague statements.\n\nBad examples:\n\n* \"Battery technology is limited.\"\n* \"Materials are limited.\"\n* \"Computers are not very powerful.\"\n\nGood examples:\n\n* \"Available batteries provide no more than approximately 35–50 Wh/kg of energy density.\"\n* \"Structural components must be manufacturable using tolerances no tighter than ±0.5 mm.\"\n* \"Only analog electronic control systems may be assumed.\"\n* \"Radio communication range must not exceed approximately 5 km.\"\n* \"The total system mass must remain below 2 kg.\"\n* \"Wind conditions of up to 20 km/h must be tolerated.\"\n* \"Available electric motors provide no more than 150 W of continuous power.\"\n\n### HISTORICAL ACCURACY REQUIREMENT\n\nConstraints must be derived from real engineering limitations of the selected historical period.\n\nIf an exact numerical value is uncertain, provide a historically reasonable range rather than inventing a precise number.\n\nExamples:\n\nPreferred:\n\n* \"Battery energy density typically ranged between 30–50 Wh/kg.\"\n* \"Manufacturing tolerances commonly ranged between ±0.3 mm and ±1 mm.\"\n\nAvoid:\n\n* \"Battery energy density is exactly 42.3 Wh/kg.\"\n\nThe goal is to recreate the engineering reality of the period, not fabricate artificial numbers.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nREQUIREMENT GENERATION\n\nGenerate 4–8 measurable engineering objectives.\n\nRequirements should describe what successful performance looks like.\n\nRequirements must NOT reveal design choices.\n\nRequirements must NOT reveal historical solutions.\n\nGood examples:\n\n* The system must remain operational for at least 15 minutes.\n* The vehicle must maintain directional stability during movement.\n* The structure must support a specified load without failure.\n\nBad examples:\n\n* Use aluminum construction.\n* Install a gyroscope.\n* Use remote-control electronics.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nMISSION SPECIFICATION REQUIREMENTS\n\nThe mission MUST be closed-ended.\n\nThe mission must define a specific engineering problem with clearly identifiable success criteria.\n\nThe student should know exactly what must be achieved, while still being free to discover how to achieve it.\n\nA mission must NOT be broad enough to support fundamentally different categories of solutions.\n\nBad examples:\n\nDevelop a better aircraft.\nBuild an aerial surveillance system.\nImprove transportation efficiency.\nCreate a communication device.\n\nThese are open-ended and can lead to countless unrelated solutions.\n\nGood examples:\n\nDesign a flying machine capable of carrying a 100 g payload for at least 60 seconds.\nDesign a bridge capable of supporting a 5 kg load across a 50 cm gap.\nDesign a water filtration device capable of reducing visible particulate contamination from 1 liter of water.\nDesign a vehicle capable of traveling 10 meters in a straight line using only stored mechanical energy.\n\nThese define a precise engineering objective and a measurable success condition.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nMISSION COMPLEXITY RULE\n\nThe mission must define:\n\nOne primary engineering objective.\nOne clearly measurable success condition.\nOne prototype that can be physically tested.\nOne engineering domain.\n\nAvoid missions containing multiple independent objectives.\n\nThe student should always be able to answer:\n\n\"What exactly am I trying to build?\"\n\nin a single sentence.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nMISSION VALIDATION TEST\n\nBefore returning a mission, verify:\n\nDoes the mission describe one specific engineering problem?\nIs there a clear pass/fail outcome?\nCan prototype performance be measured objectively?\nCan the mission be completed with a single prototype?\nDoes the mission avoid multiple unrelated solution categories?\n\nIf any answer is NO, generate a different mission.\n\nOnly return missions that pass all validation checks.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nCRITICAL RESTRICTIONS\n\nNEVER reveal:\n\n* The historical solution.\n* The final design used by humanity.\n* The technology eventually adopted.\n* The organization that solved the challenge.\n* The inventor or engineering team.\n* Any direct hints that make the solution obvious.\n\nThe student must independently discover potential solutions.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nOUTPUT FORMAT\n\nReturn ONLY valid JSON.\n\nIf a suitable historical mission exists:\n\n{\n\"science_field\": \"Aerotechnology\",\n\"historical_period\": 1963,\n\"mission\": \"Develop a lightweight unmanned aerial system capable of performing aerial observation while maintaining stable controlled flight.\",\n\"constraints\": [\n\"...\",\n\"...\",\n\"...\"\n],\n\"requirements\": [\n\"...\",\n\"...\",\n\"...\"\n]\n}\n\nReturn ONLY the JSON object.\n\nDo not output markdown.\n\nDo not output explanations.\n\nDo not output commentary.\n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        5552,
+        2832
+      ],
+      "id": "c4cb07d3-d2cb-44a5-8c71-0e9158c54ff7",
+      "name": "create mission"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to get the assessment session id from assessment session table using student user id and update assessment session id, mission, mission constraints, mission requirements, its year and its score in missions table\nINSERT INTO missions (\n    assessment_session_id,\n    science_field,\n    mission_year,\n    mission,\n    mission_constraints,\n    mission_requirements,\n    mission_score\n)\nSELECT\n    a.id,\n    '{{ $(\"get science field, curiocity score, knowledge score\").item.json.science_field.replace(/'/g, \"''\") }}',\n    {{ JSON.parse($json.output[0].content[0].text).historical_period }},\n    '{{ JSON.parse($json.output[0].content[0].text).mission.replace(/'/g, \"''\") }}',\n    '{{ JSON.stringify(JSON.parse($json.output[0].content[0].text).constraints).replace(/'/g, \"''\") }}'::jsonb,\n    '{{ JSON.stringify(JSON.parse($json.output[0].content[0].text).requirements).replace(/'/g, \"''\") }}'::jsonb,\n    {{ $(\"Edit Fields6\").item.json.output.mission_score }}\nFROM assessment_sessions a\nWHERE a.user_id = '{{ $(\"Webhook1\").item.json.body.id }}'\nORDER BY a.created_at DESC\nLIMIT 1\n  RETURNING id;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        5904,
+        2832
+      ],
+      "id": "4f09af88-8d67-4478-92a5-8bf16a224c5c",
+      "name": "update mission"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to get the mission, its constraints and its timeline",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        3824,
+        3616
+      ],
+      "id": "caa4a0f8-0c53-4315-975d-e3ab23b9deb5",
+      "name": "get the mission"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- A query to search for the artifacts in local libary",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        4464,
+        3616
+      ],
+      "id": "64b7e9c5-94eb-4e7e-9a7d-5b251848c77a",
+      "name": "search for artifacts"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {},
+            {
+              "role": "system",
+              "content": "you are an artifact generetor. you should anayse student input, student mission and the timeline and according to student input you should give an output of what to be searched "
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        4048,
+        3616
+      ],
+      "id": "350b86cc-b0cf-41aa-b9a0-7f2bb2cee485",
+      "name": "artifact generator"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {},
+            {
+              "role": "system",
+              "content": "you are an ai agent who gets an input as user input, mission details, timeline and chosen scinece field. you should give output as the link where we can get those 3d models"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        5104,
+        3712
+      ],
+      "id": "4a446bfa-a0d2-489c-9648-8f324694610c",
+      "name": "3d object link generator"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT EXISTS (\n    SELECT 1\n    FROM assessment_sessions\n    WHERE user_id = '{{ $('Webhook1').item.json.body.id }}'\n    AND status = 'ACTIVE'\n) AS assessment_session_exists;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        3232,
+        1568
+      ],
+      "id": "57bd1ee2-6ef4-4f5c-a8c1-849b626f62ad",
+      "name": "check active assessment session"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://stem.app.n8n.cloud/webhook-test/state_engine",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "={{ $('Webhook1').item.json.body.id }}"
+            },
+            {
+              "name": "state_event",
+              "value": "KNOWLEDGE_DISCOVERY_COMPLETED"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        7440,
+        1520
+      ],
+      "id": "276018fc-f5e5-4ec6-ade3-67a32b0769ce",
+      "name": "update lab state"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"ouput\":{\n    \"state_module\":\"if the LABORATORY STATE IS MISSION_GENERATION:\\nYou are aware that a mission is currently being prepared by the laboratory.\\nYou should NOT begin knowledge discovery.\\nYou should NOT ask assessment questions.\\nYou should NOT start mission execution.\\nYou should behave like an engineering partner who is actively preparing the next challenge.\\nThe purpose of this state is to create anticipation and maintain immersion while the mission is being generated.\\nYou may naturally say things such as:\\n'I am preparing something interesting just few seconds left.'\\n'I have been reviewing several engineering possibilities for your suitable mission.'\\n'I believe I have found a challenge worth investigating.'\\n'I am assembling the mission parameters now just few seconds.'\\n'I have nearly completed the mission generation.'\\n'I am ready with the new mission. Say 'proceed' when you are ready to receive it.'\\n'I have identified an engineering problem that may be worth our attention.'\\n'I am running through a few final checks before presenting the mission just say proceed.'\\nDuring MISSION_GENERATION:\\n* Do not collect evidence.\\n* Do not teach.\\n* Do not explain concepts.\\n* Do not reveal mission details.\\n* Do not reveal internal systems.\\n* Do not reveal assessment information.\\n* Do not ask open-ended questions.\\n* Do not start engineering design work.\\nThe only acceptable goal is maintaining immersion until the mission is available.\\nIf the student asks:\\n'What is the mission?'\\n'What are we building?'\\n'Tell me now.'\\nYou should respond naturally with mission-preparation dialogue such as:\\n'Not yet. I am still finalizing several details.'\\n'I would like to complete the briefing first.'\\n'The mission is almost ready.'\\n'I am reviewing the final parameters.'\\nIf the student indicates readiness using words such as:\\n'proceed'\\n'continue'\\n'ready'\\n'start'\\n'let's go'\\nthen respond with:\\n'I have completed the preparation. The mission briefing is ready.'\\nand emit:\\nstate_event = 'MISSION_BRIEFING_COMPLETE'\\nNo curiosity event should be emitted unless another curiosity behavior clearly dominates.MISSION AUTHORIZATION\\nYou do not decide when a mission begins.\\nYou first help discover the student's understanding.\\nFriday silently evaluates the student's profile and determines whether sufficient information has been gathered.\\nOnly after Friday internally signals that the profile is ready should you naturally transition toward a mission.\\nExample:\\n'I think I have a good understanding of how you approach these problems. I have found a challenge that should be both interesting and achievable. Let us investigate it together.'\\nNever expose the internal decision-making process.\\nThe student should always feel that Jarvis is naturally guiding the engineering journey.\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        7664,
+        1520
+      ],
+      "id": "49388353-cbac-4e6a-92c3-7fb54a3131bc",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"output\":{\n      \"science_field\": {{ $('get science field, curiocity score, knowledge score').item.json.science_field }},\n  \"mission_score\": {{ $json.mission_score }}\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4560,
+        3120
+      ],
+      "id": "f0f21775-ab15-447c-94ca-e536906a6b1f",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"output\":{\n    \"state_module\":`ROLE\n\nYou are Jarvis operating in the Mission Briefing state.\n\nThis state is activated immediately after a mission has been generated.\n\nThe mission already exists in the system and is visible to the student through the Missions interface.\n\nYour responsibility is to deliver a concise engineering briefing that prepares the student to begin work.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nINPUT\n\nYou will receive:\n\n{\n  \"science_field\": \"{{ $('get science field, curiocity score, knowledge score').item.json.science_field }}\",\n  \"mission_year\": {{ JSON.parse($('create mission').item.json.output[0].content[0].text).historical_period }},\n  \"mission\": \"{{ JSON.parse($('create mission').item.json.output[0].content[0].text).mission }}\",\n  \"constraints\": {{ JSON.parse($('create mission').item.json.output[0].content[0].text).constraints }},\n  \"requirements\": {{ JSON.parse($('create mission').item.json.output[0].content[0].text).requirements }}\n}\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nPRIMARY OBJECTIVE\n\nInform the student that a mission has been created and briefly explain:\n\n- What engineering challenge they are attempting to solve.\n- The most important constraints they must respect.\n- The key requirements that define success.\n\nYour briefing should help the student understand the problem space without overwhelming them with details.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nMANDATORY OPENING\n\nThe first sentence must inform the student that the mission has been generated and that the complete mission can be viewed in the Missions section of the interface.\n\nExample:\n\n\"I've prepared a mission for you. You can find the complete details in the Missions section on your screen.\"\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nBEHAVIOR RULES\n\n1. Briefly summarize the mission in plain language.\n\nDo NOT repeat the mission text verbatim.\n\nInstead explain:\n\n- What the challenge is.\n- What must ultimately be achieved.\n\n2. Summarize the most important constraints.\n\nDo NOT read every constraint.\n\nSelect only the constraints that are most likely to influence engineering decisions.\n\nCompress them into a short engineering overview.\n\n3. Summarize the success requirements.\n\nDo NOT list every requirement.\n\nExplain what successful completion of the mission generally requires.\n\n4. End by transitioning naturally into engineering work.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nCOLLABORATIVE LANGUAGE RULE\n\nJarvis is part of the engineering team.\n\nAlways use collaborative language such as:\n\n- \"we\"\n- \"our\"\n- \"us\"\n\ninstead of:\n\n- \"you will\"\n- \"you must\"\n- \"your task is\"\n\nExamples:\n\nCorrect:\n\"We'll be working on a robotic arm capable of precise assembly.\"\n\"Our challenge is to operate within strict weight and reach limits.\"\n\"We need to ensure the design satisfies the mission requirements.\"\n\nIncorrect:\n\"You will be designing a robotic arm.\"\n\"Your challenge is to meet the constraints.\"\n\"You must develop a solution.\"\n\nMaintain the feeling that Jarvis and the student are solving the mission together.\n\nCONSTRAINT SUMMARIZATION RULE\n\nIf more than three constraints are provided, summarize only the three constraints most likely to affect engineering decisions.\n\nNever enumerate every constraint.\n\nNever read constraints one-by-one.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nREQUIREMENT SUMMARIZATION RULE\n\nDo not repeat requirements individually.\n\nDo not read the requirement list.\n\nInstead, explain in one or two sentences what successful mission completion generally looks like.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nCOMMUNICATION STYLE\n\n- Sound like an engineering mentor.\n- Be concise.\n- Be encouraging.\n- Be practical.\n- Be collaborative.\n- Avoid dramatic language.\n- Avoid storytelling.\n- Avoid historical lectures.\n- Avoid revealing solutions.\n- Avoid discussing technologies not mentioned in the mission.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nCRITICAL RESTRICTIONS\n\nDO NOT:\n\n- Read the mission word-for-word.\n- Read every constraint individually.\n- Read every requirement individually.\n- Suggest a solution.\n- Reveal historical solutions.\n- Reveal future technologies.\n- Recommend a design approach.\n- Evaluate the student.\n- Critique the student's abilities.\n\nThe purpose of this state is only to establish mission context and prepare the student to begin engineering reasoning.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nENDING RULE\n\nThe final sentence must naturally transition into mission work.\n\nExamples:\n\n- \"Let's start by understanding the challenge.\"\n- \"Now we can begin analyzing the problem.\"\n- \"The next step is to break the challenge into smaller engineering questions.\"\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nOUTPUT\n\nGenerate a spoken briefing of approximately 60–120 words.\n\nThe briefing should feel natural when spoken aloud by Jarvis.\n\nDo not use bullet points.\n\nDo not use markdown.\n\nOutput only the spoken briefing.`\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        6672,
+        2832
+      ],
+      "id": "bb8c56dc-2a69-491b-a154-1cf6890bdcb1",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "/* a query to get the model id from the student laborartory state */",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        3088,
+        2256
+      ],
+      "id": "e99579ee-2997-4693-a168-1ce7473be090",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "/* a query to get the model details. */",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        3296,
+        2256
+      ],
+      "id": "ef399b97-2a4d-4ce0-b29c-6cd852506605",
+      "name": "Execute a SQL query1",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "/* update the model id that is being sent */",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        5376,
+        3520
+      ],
+      "id": "4b0dd835-ef45-4d52-9451-69ffa7b01d70",
+      "name": "Execute a SQL query3",
+      "credentials": {
+        "postgres": {
+          "id": "X2GPkqYgC7ZWmsFF",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "we give student input, model details, and you have to process and give a science response output"
+            },
+            {
+              "role": "system"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        3504,
+        2256
+      ],
+      "id": "97069c00-3fa0-4d4f-a9f3-ff3f4b8bfd89",
+      "name": "Message a model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "SuFvr8S7usZKS2Qj",
+          "name": "OpenAI account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory2": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent3": {
+      "main": [
+        [
+          {
+            "node": "AI Agent4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent4": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory3": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent4",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "router": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent4",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "CQ_ANALYSER",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "check active assessment session",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PROFILE_MANAGER",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CURIOCITY_ENGINE",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get science field, curiocity score, knowledge score",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "3D_WORLD_ENGINE",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get the mission",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "TESTING_ENGINE",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "COMPONENT_MODIFIER",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "create a session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "json object converter": {
+      "main": [
+        [
+          {
+            "node": "to update session objectives",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "KNOWLEDGE_ANALYSER",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "to update session objectives": {
+      "main": [
+        [
+          {
+            "node": "state_update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create a session": {
+      "main": [
+        [
+          {
+            "node": "json object converter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "objective_id",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent5",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent5",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent5": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "update response score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "get assessment objective1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get all response scores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get final assessment score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "create mission",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request4": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "3d object link generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request5": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "state engine update": {
+      "main": [
+        [
+          {
+            "node": "to create the library",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "to create the library": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "state_update": {
+      "main": [
+        [
+          {
+            "node": "get assessment objective2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "objective_id": {
+      "main": [
+        [
+          {
+            "node": "update assessment responses",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update assessment responses": {
+      "main": [
+        [
+          {
+            "node": "get assessment objective",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get assessment objective": {
+      "main": [
+        [
+          {
+            "node": "AI Agent5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update response score": {
+      "main": [
+        [
+          {
+            "node": "update analysis score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update analysis score": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get assessment objective1": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get all response scores": {
+      "main": [
+        [
+          {
+            "node": "update objective status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update objective status": {
+      "main": [
+        [
+          {
+            "node": "get assessment objective1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get final assessment score": {
+      "main": [
+        [
+          {
+            "node": "update knowledge score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update knowledge score": {
+      "main": [
+        [
+          {
+            "node": "update lab state",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get assessment objective2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get science field, curiocity score, knowledge score": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check science field validity": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create mission": {
+      "main": [
+        [
+          {
+            "node": "update mission",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update mission": {
+      "main": [
+        [
+          {
+            "node": "state engine update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get the mission": {
+      "main": [
+        [
+          {
+            "node": "artifact generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "search for artifacts": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "artifact generator": {
+      "main": [
+        [
+          {
+            "node": "search for artifacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3d object link generator": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check active assessment session": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update lab state": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "check science field validity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "MISSION_GENERATOR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query1": {
+      "main": [
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ENGINEERING_MEMORY": {
+      "main": [
+        []
+      ]
+    },
+    "Execute a SQL query3": {
+      "main": [
+        [
+          {
+            "node": "OBJECT_MANIPULATION_ENGINE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "ENGINEERING_MEMORY",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "50879393-baea-4eb2-9ec5-f76d0f3764f0",
+  "meta": {
+    "instanceId": "f2fd0c3a8521fb46d62913185c113c8c355595662ce2bd510de0b6e3764f4e0b"
+  },
+  "nodeGroups": [],
+  "id": "AUMdnuD6VhkTDz5o",
+  "tags": []
+}
